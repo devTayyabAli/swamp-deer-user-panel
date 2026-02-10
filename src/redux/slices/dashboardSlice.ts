@@ -42,6 +42,8 @@ interface DashboardStats {
         totalProfit: number;
         monthlyProfit: number;
         roiStatus: string;
+        currentPhase: number;
+        profitRate: number;
     };
     rewards: {
         staking: number;

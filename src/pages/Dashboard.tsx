@@ -86,8 +86,9 @@ export default function Dashboard() {
         { label: 'Total Business Volume', value: formatCurrency(stats.kpis.totalBusinessVolume), icon: BarChart3, color: 'text-blue-600', bg: 'bg-blue-100' },
         { label: 'Available Balance', value: formatCurrency(stats.kpis.availableBalance), icon: Wallet, color: 'text-emerald-600', bg: 'bg-emerald-100' },
         { label: 'Total Direct Business', value: formatCurrency(stats.kpis.totalDirectBusiness), icon: UserPlus, color: 'text-emerald-300', bg: 'bg-emerald-50' },
-        { label: 'Investment Bonus', value: formatCurrency(stats.kpis.stakingIncome), icon: TrendingUp, color: 'text-primary', bg: 'bg-primary/10' },
+        { label: 'Staking Bonus', value: formatCurrency(stats.kpis.stakingIncome), icon: TrendingUp, color: 'text-primary', bg: 'bg-primary/10' },
         { label: 'Referral Bonus', value: formatCurrency(stats.kpis.referralIncome), icon: Target, color: 'text-orange-600', bg: 'bg-orange-100' },
+        { label: 'Level Bonus', value: formatCurrency(stats.kpis.levelIncome), icon: Users, color: 'text-purple-600', bg: 'bg-purple-100' },
         { label: 'Total Profit Earned', value: formatCurrency(stats.kpis.totalProfitEarned), icon: Trophy, color: 'text-accent-gold', bg: 'bg-accent-gold/10' },
     ];
 
@@ -192,7 +193,7 @@ export default function Dashboard() {
                                 Investment Overview
                             </h3>
 
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                                 <div className="space-y-1">
                                     <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Total Investment</p>
                                     <h4 className="text-3xl font-black text-primary tracking-tight">{formatCurrency(stats.investment.totalInvestment)}</h4>
@@ -204,6 +205,12 @@ export default function Dashboard() {
                                 <div className="space-y-1">
                                     <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Monthly Profit</p>
                                     <h4 className="text-3xl font-black text-gray-900 tracking-tight">{formatCurrency(stats.investment.monthlyProfit)}</h4>
+                                </div>
+                                <div className="space-y-1">
+                                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Current Rate</p>
+                                    <h4 className="text-3xl font-black text-blue-600 tracking-tight">
+                                        {((stats.investment.profitRate || 0) * 100).toFixed(1)}% <span className="text-xs font-bold text-gray-400 ml-1">Phase {stats.investment.currentPhase || 1}</span>
+                                    </h4>
                                 </div>
                             </div>
 
