@@ -13,6 +13,7 @@ interface Sale {
     investorId?: any;
     branchId?: any;
     documentPath?: string;
+    productStatus?: string;
 }
 
 interface SalesState {
@@ -41,7 +42,15 @@ export const createSale = createAsyncThunk(
     'sales/create',
     async (saleData: any, { rejectWithValue }) => {
         try {
-            const response = await api.post('/sales', saleData);
+            // Check if saleData is FormData (for file uploads)
+            const isFormData = saleData instanceof FormData;
+            const config = isFormData ? {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                }
+            } : {};
+
+            const response = await api.post('/sales', saleData, config);
             return response.data;
         } catch (error: any) {
             return rejectWithValue(

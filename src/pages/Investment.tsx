@@ -24,18 +24,14 @@ const Investment = () => {
         formState: { errors },
     } = useForm({
         defaultValues: {
-            description: '',
             investorType: 'With Product',
-            investorProfit: 0.05,
             amount: 0,
-            commissionRate: 0.05,
             paymentMethod: 'Cash in hand',
         },
     });
 
-    const amount = watch('amount') || 0;
-    const commissionRate = watch('commissionRate');
-    const calculatedCommission = Math.round(amount * (commissionRate || 0));
+    const [receipt, setReceipt] = useState<File | null>(null);
+    const paymentMethod = watch('paymentMethod');
 
     useEffect(() => {
         if (activeTab === 'history') {
@@ -49,6 +45,7 @@ const Investment = () => {
             setSuccessInvestment({ id: 'NEW' });
             dispatch(resetSalesState());
             reset();
+            setReceipt(null);
         }
         if (error) {
             toast.error(error);
@@ -56,22 +53,33 @@ const Investment = () => {
         }
     }, [success, error, dispatch, reset]);
 
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            setReceipt(e.target.files[0]);
+        }
+    };
+
     const onSubmit = async (data: any) => {
         if (!user) {
             toast.error('You must be logged in to invest.');
             return;
         }
 
-        const saleData = {
-            description: data.description,
-            amount: Number(data.amount),
-            commission: Math.round(data.amount * data.commissionRate),
-            investorProfit: Number(data.investorProfit),
-            paymentMethod: data.paymentMethod,
-            productStatus: data.investorType === 'With Product' ? 'with_product' : 'without_product'
-        };
+        if (paymentMethod === 'Bank account' && !receipt) {
+            toast.error('Please upload bank transition receipt');
+            return;
+        }
 
-        dispatch(createSale(saleData));
+        const formData = new FormData();
+        formData.append('amount', data.amount.toString());
+        formData.append('paymentMethod', data.paymentMethod);
+        formData.append('productStatus', data.investorType === 'With Product' ? 'with_product' : 'without_product');
+
+        if (receipt) {
+            formData.append('receipt', receipt);
+        }
+
+        dispatch(createSale(formData));
     };
 
     if (successInvestment) {
@@ -144,18 +152,28 @@ const Investment = () => {
                         <form onSubmit={handleSubmit(onSubmit)} className="p-6 sm:p-12 space-y-10">
                             <div className="space-y-8">
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                    <div className="space-y-2 col-span-1 md:col-span-1">
-                                        <label className="text-[11px] font-black text-[#111813] uppercase tracking-widest ml-1 opacity-70">Sale Description</label>
-                                        <input
-                                            {...register('description', { required: 'Description is required' })}
-                                            className={cn(
-                                                "w-full rounded-xl border bg-white focus:ring-4 focus:ring-[#006820]/5 focus:border-[#006820] text-[13px] p-4 placeholder:text-gray-300 font-medium transition-all outline-none",
-                                                errors.description ? "border-red-500" : "border-[#dbe6df]"
-                                            )}
-                                            placeholder="Enter specifics about the sale"
-                                        />
-                                        {errors.description && <p className="text-[10px] text-red-500 ml-1">{errors.description.message}</p>}
+                                    <div className="space-y-2">
+                                        <label className="text-[11px] font-black text-[#111813] uppercase tracking-widest ml-1 opacity-70">Amount (PKR)</label>
+                                        <div className="relative">
+                                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-bold text-sm pointer-events-none">
+                                                Rs
+                                            </div>
+                                            <input
+                                                {...register('amount', {
+                                                    required: 'Amount is required',
+                                                    min: { value: 1, message: 'Amount must be greater than 0' }
+                                                })}
+                                                className={cn(
+                                                    "w-full rounded-xl border bg-white focus:ring-4 focus:ring-[#006820]/5 focus:border-[#006820] text-sm pl-12 pr-4 py-4 font-bold text-gray-900 transition-all outline-none",
+                                                    errors.amount ? "border-red-500" : "border-[#dbe6df]"
+                                                )}
+                                                placeholder="0"
+                                                type="number"
+                                            />
+                                        </div>
+                                        {errors.amount && <p className="text-[10px] text-red-500 ml-1">{errors.amount.message}</p>}
                                     </div>
+
                                     <div className="space-y-2">
                                         <label className="text-[11px] font-black text-[#111813] uppercase tracking-widest ml-1 opacity-70">Investor Type</label>
                                         <select
@@ -166,50 +184,7 @@ const Investment = () => {
                                             <option value="Without Product">Without Product</option>
                                         </select>
                                     </div>
-                                    <div className="space-y-2">
-                                        <label className="text-[11px] font-black text-[#111813] uppercase tracking-widest ml-1 opacity-70">Investor Profit Rate</label>
-                                        <select
-                                            {...register('investorProfit')}
-                                            className="w-full rounded-xl border border-[#dbe6df] bg-white focus:ring-4 focus:ring-[#006820]/5 focus:border-[#006820] text-[13px] p-4 font-medium text-gray-700 outline-none transition-all"
-                                        >
-                                            <option value={0.05}>5% Profit Share</option>
-                                            <option value={0.06}>6% Profit Share</option>
-                                            <option value={0.07}>7% Profit Share</option>
-                                        </select>
-                                    </div>
-                                </div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                    <div className="space-y-2">
-                                        <label className="text-[11px] font-black text-[#111813] uppercase tracking-widest ml-1 opacity-70">Amount (PKR)</label>
-                                        <div className="relative">
-                                            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-[13px]">Rs</span>
-                                            <input
-                                                {...register('amount', {
-                                                    required: 'Amount is required',
-                                                    min: { value: 1, message: 'Amount must be greater than 0' }
-                                                })}
-                                                className={cn(
-                                                    "w-full rounded-xl border bg-white focus:ring-4 focus:ring-[#006820]/5 focus:border-[#006820] text-[13px] pl-10 p-4 font-bold text-gray-900 transition-all outline-none",
-                                                    errors.amount ? "border-red-500" : "border-[#dbe6df]"
-                                                )}
-                                                placeholder="0.00"
-                                                type="number"
-                                            />
-                                        </div>
-                                        {errors.amount && <p className="text-[10px] text-red-500 ml-1">{errors.amount.message}</p>}
-                                    </div>
-                                    <div className="space-y-2">
-                                        <label className="text-[11px] font-black text-[#111813] uppercase tracking-widest ml-1 opacity-70">Commission Rate</label>
-                                        <select
-                                            {...register('commissionRate')}
-                                            className="w-full rounded-xl border border-[#dbe6df] bg-white focus:ring-4 focus:ring-[#006820]/5 focus:border-[#006820] text-[13px] p-4 font-medium text-gray-700 outline-none transition-all"
-                                        >
-                                            <option value={0.05}>5% Commission</option>
-                                            <option value={0.06}>6% Commission</option>
-                                            <option value={0.07}>7% Commission</option>
-                                        </select>
-                                    </div>
                                     <div className="space-y-2">
                                         <label className="text-[11px] font-black text-[#111813] uppercase tracking-widest ml-1 opacity-70">Payment Method</label>
                                         <select
@@ -222,32 +197,43 @@ const Investment = () => {
                                     </div>
                                 </div>
 
-                                {/* Calculated Commission Card */}
-                                <div className="p-6 sm:p-10 bg-white rounded-2xl sm:rounded-3xl border-[2px] border-[#D4AF37] relative overflow-hidden shadow-xl shadow-accent-gold/5 group/reward">
-                                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-8 relative z-10">
-                                        <div className="flex items-center gap-6 sm:gap-8">
-                                            <div className="size-14 sm:size-16 bg-[#D4AF37] rounded-2xl shadow-xl shadow-accent-gold/20 flex items-center justify-center shrink-0">
-                                                <span className="material-symbols-outlined text-white text-3xl sm:text-4xl font-black">payments</span>
-                                            </div>
-                                            <div>
-                                                <p className="text-[#61896f] text-[10px] font-black uppercase tracking-[0.25em] mb-1.5 opacity-60">Calculated Commission</p>
-                                                <div className="flex items-baseline gap-2">
-                                                    <span className="text-[#D4AF37] text-2xl font-bold">Rs</span>
-                                                    <span className="text-[#D4AF37] text-4xl sm:text-6xl font-black tracking-tighter tabular-nums leading-none">
-                                                        {calculatedCommission.toLocaleString()}
+                                {paymentMethod === 'Bank account' && (
+                                    <div className="space-y-3 animate-in fade-in slide-in-from-top-4 duration-500">
+                                        <label className="text-[11px] font-black text-[#111813] uppercase tracking-widest ml-1 opacity-70">Upload Receipt</label>
+                                        <div className="relative group/upload">
+                                            <input
+                                                type="file"
+                                                onChange={handleFileChange}
+                                                accept="image/*"
+                                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                                            />
+                                            <div className={cn(
+                                                "w-full rounded-2xl border-2 border-dashed p-8 transition-all flex flex-col items-center justify-center gap-3",
+                                                receipt ? "border-[#006820] bg-[#006820]/5" : "border-[#dbe6df] bg-gray-50 group-hover/upload:border-[#006820]/30"
+                                            )}>
+                                                <div className={cn(
+                                                    "size-12 rounded-full flex items-center justify-center shadow-lg transition-transform group-hover/upload:scale-110",
+                                                    receipt ? "bg-[#006820] text-white" : "bg-white text-gray-400"
+                                                )}>
+                                                    <span className="material-symbols-outlined">
+                                                        {receipt ? 'check' : 'cloud_upload'}
                                                     </span>
+                                                </div>
+                                                <div className="text-center">
+                                                    <p className={cn(
+                                                        "text-[13px] font-black tracking-tight",
+                                                        receipt ? "text-[#006820]" : "text-gray-600"
+                                                    )}>
+                                                        {receipt ? receipt.name : 'Click to upload transition receipt'}
+                                                    </p>
+                                                    <p className="text-[10px] text-gray-400 font-bold mt-1 uppercase tracking-widest">
+                                                        PNG, JPG or JPEG (Max 5MB)
+                                                    </p>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-2 pt-6 sm:pt-0 border-t sm:border-t-0 border-[#D4AF37]/10">
-                                            <p className="text-[#61896f] text-[11px] font-bold italic tracking-tight opacity-50">Based on branch rate</p>
-                                            <div className="flex items-center gap-2 text-[#006820] font-black text-[10px] sm:text-[11px] uppercase bg-[#006820]/5 px-4 py-2 rounded-full border border-[#006820]/10">
-                                                <span className="material-symbols-outlined text-[16px]">verified</span>
-                                                Verified
-                                            </div>
-                                        </div>
                                     </div>
-                                </div>
+                                )}
                             </div>
 
                             <div className="pt-10 border-t border-[#f0f4f2] flex flex-col md:flex-row items-center justify-between gap-8">
@@ -267,7 +253,7 @@ const Investment = () => {
                                         disabled={loading}
                                         className="flex items-center justify-center gap-3 px-10 py-4 rounded-xl bg-[#006820] hover:bg-black text-white text-[15px] font-black transition-all shadow-2xl shadow-[#006820]/20 active:scale-[0.98] whitespace-nowrap disabled:opacity-70"
                                     >
-                                        <span>{loading ? 'Submitting...' : 'Submit Sale'}</span>
+                                        <span>{loading ? 'Submitting...' : 'Submit Investment'}</span>
                                         <ChevronRight />
                                     </button>
                                 </div>
@@ -286,7 +272,7 @@ const Investment = () => {
                                     <th className="px-6 py-5 text-xs font-bold text-gray-500 uppercase tracking-widest whitespace-nowrap">Sale Details</th>
                                     <th className="px-6 py-5 text-xs font-bold text-gray-500 uppercase tracking-widest whitespace-nowrap">Amount</th>
                                     <th className="px-6 py-5 text-xs font-bold text-gray-500 uppercase tracking-widest whitespace-nowrap">Date</th>
-                                    <th className="px-6 py-5 text-xs font-bold text-gray-500 uppercase tracking-widest whitespace-nowrap">Profit</th>
+                                    <th className="px-6 py-5 text-xs font-bold text-gray-500 uppercase tracking-widest whitespace-nowrap">Investor Type</th>
                                     <th className="px-6 py-5 text-xs font-bold text-gray-500 uppercase tracking-widest text-right whitespace-nowrap">Status</th>
                                 </tr>
                             </thead>
@@ -313,7 +299,11 @@ const Investment = () => {
                                             </span>
                                         </td>
                                         <td className="px-6 py-5">
-                                            <span className="font-bold text-primary text-sm">{(inv.investorProfit * 100).toFixed(0)}% Share</span>
+                                            <span className="font-bold text-primary text-sm">
+                                                {inv?.productStatus
+                                                    ?.replace(/_/g, " ")
+                                                    .replace(/\b\w/g, c => c.toUpperCase())}
+                                            </span>
                                         </td>
                                         <td className="px-6 py-5 text-right">
                                             <span className={cn(

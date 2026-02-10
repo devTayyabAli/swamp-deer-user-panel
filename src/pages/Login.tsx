@@ -87,9 +87,7 @@ export default function Login() {
                                             },
                                         })}
                                         type="email"
-                                        className={`
-                                            "w-full pl-11 pr-4 py-3 bg-white border rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none",
-                                            ${errors.email ? "border-red-500" : "border-gray-200"}`}
+                                        className={`w-full pl-11 pr-4 py-3 bg-white border rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none ${errors.email ? "border-red-500" : "border-gray-200"}`}
                                         placeholder="name@example.com"
                                     />
                                 </div>
