@@ -22,6 +22,7 @@ import type { RootState, AppDispatch } from '../redux/store';
 export default function Dashboard() {
     const dispatch = useDispatch<AppDispatch>();
     const { stats, loading, error } = useSelector((state: RootState) => state.dashboard);
+    const [activeInvIndex, setActiveInvIndex] = React.useState(0);
 
     React.useEffect(() => {
         dispatch(fetchDashboardStats());
@@ -188,29 +189,77 @@ export default function Dashboard() {
                         <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-50 rounded-full translate-x-1/2 -translate-y-1/2 opacity-50" />
 
                         <div className="relative z-10">
-                            <h3 className="text-lg font-bold text-gray-900 mb-8 flex items-center gap-2">
-                                <TrendingUp className="w-5 h-5 text-primary" />
-                                Investment Overview
-                            </h3>
+                            <div className="flex items-center justify-between mb-8">
+                                <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                                    <TrendingUp className="w-5 h-5 text-primary" />
+                                    Investment Overview
+                                </h3>
+                                {stats.investment.activeInvestments && stats.investment.activeInvestments.length > 1 && (
+                                    <div className="flex items-center gap-2 bg-gray-100 rounded-lg p-1">
+                                        <button
+                                            onClick={() => setActiveInvIndex(prev => prev === 0 ? stats.investment.activeInvestments.length - 1 : prev - 1)}
+                                            className="p-1 hover:bg-white rounded shadow-sm transition-all"
+                                        >
+                                            <ChevronRight className="w-4 h-4 rotate-180" />
+                                        </button>
+                                        <span className="text-[10px] font-bold text-gray-500 w-12 text-center">
+                                            {activeInvIndex + 1} / {stats.investment.activeInvestments.length}
+                                        </span>
+                                        <button
+                                            onClick={() => setActiveInvIndex(prev => prev === stats.investment.activeInvestments.length - 1 ? 0 : prev + 1)}
+                                            className="p-1 hover:bg-white rounded shadow-sm transition-all"
+                                        >
+                                            <ChevronRight className="w-4 h-4" />
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                                 <div className="space-y-1">
                                     <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Total Investment</p>
-                                    <h4 className="text-3xl font-black text-primary tracking-tight">{formatCurrency(stats.investment.totalInvestment)}</h4>
+                                    <h4 className="text-3xl font-black text-primary tracking-tight">
+                                        {formatCurrency(
+                                            stats.investment.activeInvestments?.[activeInvIndex]?.amount ?? stats.investment.totalInvestment
+                                        )}
+                                    </h4>
                                 </div>
                                 <div className="space-y-1">
                                     <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Total Profit</p>
-                                    <h4 className="text-3xl font-black text-accent-gold tracking-tight">{formatCurrency(stats.investment.totalProfit)}</h4>
+                                    <h4 className="text-3xl font-black text-accent-gold tracking-tight">
+                                        {formatCurrency(
+                                            stats.investment.activeInvestments?.[activeInvIndex]?.totalProfit ?? stats.investment.totalProfit
+                                        )}
+                                    </h4>
                                 </div>
                                 <div className="space-y-1">
                                     <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Monthly Profit</p>
-                                    <h4 className="text-3xl font-black text-gray-900 tracking-tight">{formatCurrency(stats.investment.monthlyProfit)}</h4>
+                                    <h4 className="text-3xl font-black text-gray-900 tracking-tight">
+                                        {formatCurrency(
+                                            stats.investment.activeInvestments?.[activeInvIndex]?.monthlyProfit ?? stats.investment.monthlyProfit
+                                        )}
+                                    </h4>
                                 </div>
                                 <div className="space-y-1">
-                                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Current Rate</p>
+                                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2">
+                                        Current Plan
+                                        {stats.investment.activeInvestments && stats.investment.activeInvestments.length > 0 && (
+                                            <span className="px-1.5 py-0.5 bg-blue-50 text-blue-600 text-[8px] rounded border border-blue-100 uppercase">
+                                                {(stats.investment.activeInvestments[activeInvIndex]?.productStatus === 'with_product' ? 'With Product' : 'Without Product')}
+                                            </span>
+                                        )}
+                                    </p>
                                     <h4 className="text-3xl font-black text-blue-600 tracking-tight">
-                                        {((stats.investment.profitRate || 0) * 100).toFixed(1)}% <span className="text-xs font-bold text-gray-400 ml-1">Phase {stats.investment.currentPhase || 1}</span>
+                                        {((stats.investment.activeInvestments?.[activeInvIndex]?.profitRate ?? stats.investment.profitRate ?? 0) * 100).toFixed(1)}%
+                                        <span className="text-xs font-bold text-gray-400 ml-1">
+                                            Phase {stats.investment.activeInvestments?.[activeInvIndex]?.currentPhase ?? stats.investment.currentPhase ?? 1}
+                                        </span>
                                     </h4>
+                                    {stats.investment.activeInvestments && stats.investment.activeInvestments[activeInvIndex] && (
+                                        <p className="text-[10px] text-gray-400 font-bold mt-1">
+                                            Amt: {formatCurrency(stats.investment.activeInvestments[activeInvIndex].amount)}
+                                        </p>
+                                    )}
                                 </div>
                             </div>
 
@@ -342,6 +391,6 @@ export default function Dashboard() {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }

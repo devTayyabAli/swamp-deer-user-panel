@@ -16,6 +16,7 @@ interface RewardsState {
     page: number;
     pages: number;
     total: number;
+    filteredTotal: number;
 }
 
 const initialState: RewardsState = {
@@ -30,7 +31,8 @@ const initialState: RewardsState = {
     error: null,
     page: 1,
     pages: 1,
-    total: 0
+    total: 0,
+    filteredTotal: 0
 };
 
 export const fetchRewardSummary = createAsyncThunk(
@@ -92,6 +94,7 @@ const rewardsSlice = createSlice({
                 state.page = action.payload.page;
                 state.pages = action.payload.pages;
                 state.total = action.payload.total;
+                state.filteredTotal = action.payload.filteredTotal;
             })
             .addCase(fetchRewards.rejected, (state, action) => {
                 state.loading = false;

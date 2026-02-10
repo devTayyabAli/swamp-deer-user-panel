@@ -80,7 +80,17 @@ export default function SignUp() {
 
     const onSubmit = (data: any) => {
         const { confirmPassword, ...userData } = data;
-        dispatch(registerUser(userData));
+        dispatch(registerUser(userData))
+            .unwrap()
+            .then((res: any) => {
+                if (!res) {
+                    toast.success('Account created! Please check your email to verify.');
+                    navigate('/login');
+                }
+            })
+            .catch(() => {
+                // Error handled by useEffect
+            });
     };
 
     return (

@@ -15,6 +15,17 @@ interface Level {
     remainingTotal: number;
 }
 
+interface ActiveInvestment {
+    _id: string;
+    amount: number;
+    currentPhase: number;
+    profitRate: number;
+    productStatus: string;
+    date: string;
+    totalProfit: number;
+    monthlyProfit: number;
+}
+
 interface DashboardStats {
     user: {
         name: string;
@@ -44,6 +55,7 @@ interface DashboardStats {
         roiStatus: string;
         currentPhase: number;
         profitRate: number;
+        activeInvestments: ActiveInvestment[];
     };
     rewards: {
         staking: number;

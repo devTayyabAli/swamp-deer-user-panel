@@ -57,13 +57,36 @@ export const register = createAsyncThunk(
         try {
             const response = await api.post('/auth/register', userData);
             if (response.data.success) {
-                localStorage.setItem('user', JSON.stringify(response.data.data));
-                return response.data.data;
+                // If token is present, login immediately (admin created user pre-verified)
+                if (response.data.data.token) {
+                    localStorage.setItem('user', JSON.stringify(response.data.data));
+                    return response.data.data;
+                }
+                // If no token, return null or indicator. Since redux fulfilled payload becomes user, returning null means no user set.
+                // The component can infer success by lack of rejection.
+                return null;
             }
             return rejectWithValue(response.data.message);
         } catch (error: any) {
             return rejectWithValue(
                 error.response?.data?.message || 'Registration failed. Please try again.'
+            );
+        }
+    }
+);
+
+export const verifyEmail = createAsyncThunk(
+    'auth/verifyEmail',
+    async (token: string, { rejectWithValue }) => {
+        try {
+            const response = await api.put(`/auth/verifyemail/${token}`); // Use PUT as defined in backend routes
+            if (response.data.success) {
+                return response.data.message;
+            }
+            return rejectWithValue(response.data.message);
+        } catch (error: any) {
+            return rejectWithValue(
+                error.response?.data?.message || 'Verification failed.'
             );
         }
     }
