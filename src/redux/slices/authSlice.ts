@@ -14,6 +14,7 @@ interface User {
     totalTeamSize?: number;
     currentLevel?: number;
     createdAt?: string;
+    profilePic?: string;
     token: string;
 }
 

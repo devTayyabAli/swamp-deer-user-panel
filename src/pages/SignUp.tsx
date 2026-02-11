@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { Mail, Lock, User, UserPlus, ChevronRight, Hash, Phone } from 'lucide-react';
+import { Mail, Lock, User, UserPlus, ChevronRight, Hash, Phone, Eye, EyeOff } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
@@ -17,6 +17,8 @@ export default function SignUp() {
     const dispatch = useDispatch<AppDispatch>();
     const { user, loading, error } = useSelector((state: RootState) => state.auth);
     const [branches, setBranches] = useState<any[]>([]);
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const {
         register,
@@ -70,8 +72,14 @@ export default function SignUp() {
 
     const validateField = async (field: string, value: string) => {
         if (!value) return true;
+        let validationValue = value;
+        if (field === 'phone') {
+            // Remove any leading zero if user accidentally enters it
+            const cleanPhone = value.startsWith('0') ? value.substring(1) : value;
+            validationValue = `+92${cleanPhone}`;
+        }
         try {
-            const response = await api.post('/auth/validate', { field, value });
+            const response = await api.post('/auth/validate', { field, value: validationValue });
             return response.data.success || response.data.message;
         } catch (err: any) {
             return err.response?.data?.message || 'Validation failed';
@@ -80,6 +88,10 @@ export default function SignUp() {
 
     const onSubmit = (data: any) => {
         const { confirmPassword, ...userData } = data;
+        // Prepend +92 and handle possible leading zero
+        const cleanPhone = userData.phone.startsWith('0') ? userData.phone.substring(1) : userData.phone;
+        userData.phone = `+92${cleanPhone}`;
+
         dispatch(registerUser(userData))
             .unwrap()
             .then((res: any) => {
@@ -103,8 +115,8 @@ export default function SignUp() {
                 </div>
 
                 <div className="relative z-10 text-center space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
-                    <div className="w-32 h-32 mx-auto bg-white/5 backdrop-blur-md rounded-3xl flex items-center justify-center border border-white/10 shadow-2xl">
-                        <span className="text-4xl font-black text-accent-gold tracking-tighter italic">SD</span>
+                    <div className="w-32 h-32 mx-auto bg-card-bg/5 backdrop-blur-md rounded-3xl flex items-center justify-center border border-white/10 shadow-2xl p-6">
+                        <img src="/favicon.png" alt="Swamp Deer Logo" className="w-full h-full object-contain" />
                     </div>
                     <div className="space-y-4">
                         <h1 className="text-5xl font-extrabold text-white tracking-tight leading-tight">
@@ -122,24 +134,24 @@ export default function SignUp() {
                 <div className="w-full max-w-md space-y-8 animate-in fade-in slide-in-from-right-8 duration-700">
                     <div className="text-center lg:text-left space-y-2">
                         <div className="flex lg:hidden justify-center mb-6">
-                            <span className="text-3xl font-black text-primary tracking-tighter italic">SWAMP DEER</span>
+                            <img src="/favicon.png" alt="Swamp Deer Logo" className="h-12 w-auto" />
                         </div>
-                        <h2 className="text-3xl font-bold text-gray-900 tracking-tight">Create Account</h2>
-                        <p className="text-gray-500">Join our community and start earning сегодня</p>
+                        <h2 className="text-3xl font-bold text-text-main tracking-tight">Create Account</h2>
+                        <p className="text-text-muted">Join our community and start earning сегодня</p>
                     </div>
 
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 mt-8">
                         <div className="grid grid-cols-1 gap-4">
                             <div className="group space-y-1">
-                                <label className="text-sm font-semibold text-gray-700 ml-1">Full Name</label>
+                                <label className="text-sm font-semibold text-text-main ml-1">Full Name</label>
                                 <div className="relative">
-                                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-primary transition-colors" />
+                                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted group-focus-within:text-primary transition-colors" />
                                     <input
                                         {...register('name', { required: 'Full Name is required' })}
                                         type="text"
                                         className={cn(
-                                            "w-full pl-11 pr-4 py-3 bg-white border rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none",
-                                            errors.name ? "border-red-500" : "border-gray-200"
+                                            "w-full pl-11 pr-4 py-3 bg-soft border rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none text-text-main",
+                                            errors.name ? "border-red-500" : "border-border-subtle"
                                         )}
                                         placeholder="Enter your full name"
                                     />
@@ -148,9 +160,9 @@ export default function SignUp() {
                             </div>
 
                             <div className="group space-y-1">
-                                <label className="text-sm font-semibold text-gray-700 ml-1">Username</label>
+                                <label className="text-sm font-semibold text-text-main ml-1">Username</label>
                                 <div className="relative">
-                                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-primary transition-colors" />
+                                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted group-focus-within:text-primary transition-colors" />
                                     <input
                                         {...register('userName', {
                                             required: 'Username is required',
@@ -158,8 +170,8 @@ export default function SignUp() {
                                         })}
                                         type="text"
                                         className={cn(
-                                            "w-full pl-11 pr-4 py-3 bg-white border rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none",
-                                            errors.userName ? "border-red-500" : "border-gray-200"
+                                            "w-full pl-11 pr-4 py-3 bg-soft border rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none text-text-main",
+                                            errors.userName ? "border-red-500" : "border-border-subtle"
                                         )}
                                         placeholder="Select a username"
                                     />
@@ -168,9 +180,9 @@ export default function SignUp() {
                             </div>
 
                             <div className="group space-y-1">
-                                <label className="text-sm font-semibold text-gray-700 ml-1">Email Address</label>
+                                <label className="text-sm font-semibold text-text-main ml-1">Email Address</label>
                                 <div className="relative">
-                                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-primary transition-colors" />
+                                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted group-focus-within:text-primary transition-colors" />
                                     <input
                                         {...register('email', {
                                             required: 'Email is required',
@@ -182,8 +194,8 @@ export default function SignUp() {
                                         })}
                                         type="email"
                                         className={cn(
-                                            "w-full pl-11 pr-4 py-3 bg-white border rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none",
-                                            errors.email ? "border-red-500" : "border-gray-200"
+                                            "w-full pl-11 pr-4 py-3 bg-soft border rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none text-text-main",
+                                            errors.email ? "border-red-500" : "border-border-subtle"
                                         )}
                                         placeholder="name@example.com"
                                     />
@@ -192,62 +204,69 @@ export default function SignUp() {
                             </div>
 
                             <div className="group space-y-1">
-                                <label className="text-sm font-semibold text-gray-700 ml-1">Phone Number</label>
+                                <label className="text-sm font-semibold text-text-main ml-1">Phone Number</label>
                                 <div className="relative">
-                                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-primary transition-colors" />
+                                    <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center gap-2 z-10 pointer-events-none">
+                                        <Phone className="w-5 h-5 text-text-muted group-focus-within:text-primary transition-colors" />
+                                        <span className="text-sm font-bold text-text-main border-r border-border-subtle pr-2">+92</span>
+                                    </div>
                                     <input
                                         {...register('phone', {
                                             required: 'Phone Number is required',
+                                            pattern: {
+                                                value: /^[0-9]{9,11}$/,
+                                                message: 'Please enter a valid mobile number'
+                                            },
                                             validate: (val) => validateField('phone', val)
                                         })}
                                         type="tel"
                                         className={cn(
-                                            "w-full pl-11 pr-4 py-3 bg-white border rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none",
-                                            errors.phone ? "border-red-500" : "border-gray-200"
+                                            "w-full pl-24 pr-4 py-3 bg-soft border rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none text-text-main font-bold",
+                                            errors.phone ? "border-red-500" : "border-border-subtle"
                                         )}
-                                        placeholder="+1 234 567 890"
+                                        placeholder="300 1234567"
                                     />
                                 </div>
                                 {errors.phone && <p className="text-xs text-red-500 ml-1 mt-1">{errors.phone.message}</p>}
                             </div>
 
                             <div className="group space-y-1">
-                                <label className="text-sm font-semibold text-gray-700 ml-1">Select Branch</label>
+                                <label className="text-sm font-semibold text-text-main ml-1">Select Branch</label>
                                 <div className="relative">
-                                    <Hash className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-primary transition-colors" />
+                                    <Hash className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted group-focus-within:text-primary transition-colors" />
                                     <select
                                         {...register('branch', { required: 'Please select a branch' })}
                                         className={cn(
-                                            "w-full pl-11 pr-4 py-3 bg-white border rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none appearance-none cursor-pointer",
-                                            errors.branch ? "border-red-500" : "border-gray-200"
+                                            "w-full pl-11 pr-4 py-3 bg-soft border rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none appearance-none cursor-pointer text-text-main",
+                                            errors.branch ? "border-red-500" : "border-border-subtle"
                                         )}
                                     >
-                                        <option value="">Select a branch</option>
+                                        <option value="" className="bg-card-bg">Select a branch</option>
                                         {branches.map((b) => (
-                                            <option key={b._id} value={b._id}>
+                                            <option key={b._id} value={b._id} className="bg-card-bg">
                                                 {b.name} ({b.city})
                                             </option>
                                         ))}
                                     </select>
                                     <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                                        <ChevronRight className="w-4 h-4 rotate-90 text-gray-400" />
+                                        <ChevronRight className="w-4 h-4 rotate-90 text-text-muted" />
                                     </div>
                                 </div>
                                 {errors.branch && <p className="text-xs text-red-500 ml-1 mt-1">{errors.branch.message}</p>}
                             </div>
 
                             <div className="group space-y-1">
-                                <label className="text-sm font-semibold text-gray-700 ml-1">Referral ID (Upline ID)</label>
+                                <label className="text-sm font-semibold text-text-main ml-1">Referral ID (Upline ID)</label>
                                 <div className="relative">
-                                    <Hash className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-primary transition-colors" />
+                                    <Hash className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted group-focus-within:text-primary transition-colors" />
                                     <input
                                         {...register('upline', {
                                             validate: (val) => validateField('upline', val)
                                         })}
                                         type="text"
                                         className={cn(
-                                            "w-full pl-11 pr-4 py-3 bg-white border rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none",
-                                            errors.upline ? "border-red-500" : "border-gray-200"
+                                            "w-full pl-11 pr-4 py-3 bg-soft border rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none text-text-main",
+                                            errors.upline ? "border-red-500" : "border-border-subtle"
                                         )}
                                         placeholder="Upline User ID"
                                     />
@@ -256,9 +275,9 @@ export default function SignUp() {
                             </div>
 
                             <div className="group space-y-1">
-                                <label className="text-sm font-semibold text-gray-700 ml-1">Create Password</label>
+                                <label className="text-sm font-semibold text-text-main ml-1">Create Password</label>
                                 <div className="relative">
-                                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-primary transition-colors" />
+                                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted group-focus-within:text-primary transition-colors" />
                                     <input
                                         {...register('password', {
                                             required: 'Password is required',
@@ -267,21 +286,28 @@ export default function SignUp() {
                                                 message: 'Password must be at least 8 characters',
                                             },
                                         })}
-                                        type="password"
+                                        type={showPassword ? 'text' : 'password'}
                                         className={cn(
-                                            "w-full pl-11 pr-4 py-3 bg-white border rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none",
-                                            errors.password ? "border-red-500" : "border-gray-200"
+                                            "w-full pl-11 pr-12 py-3 bg-soft border rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none text-text-main",
+                                            errors.password ? "border-red-500" : "border-border-subtle"
                                         )}
                                         placeholder="Min. 8 characters"
                                     />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-primary transition-colors focus:outline-none"
+                                    >
+                                        {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                    </button>
                                 </div>
                                 {errors.password && <p className="text-xs text-red-500 ml-1 mt-1">{errors.password.message}</p>}
                             </div>
 
                             <div className="group space-y-1">
-                                <label className="text-sm font-semibold text-gray-700 ml-1">Confirm Password</label>
+                                <label className="text-sm font-semibold text-text-main ml-1">Confirm Password</label>
                                 <div className="relative">
-                                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-primary transition-colors" />
+                                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted group-focus-within:text-primary transition-colors" />
                                     <input
                                         {...register('confirmPassword', {
                                             required: 'Please confirm your password',
@@ -291,13 +317,20 @@ export default function SignUp() {
                                                 }
                                             },
                                         })}
-                                        type="password"
+                                        type={showConfirmPassword ? 'text' : 'password'}
                                         className={cn(
-                                            "w-full pl-11 pr-4 py-3 bg-white border rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none",
-                                            errors.confirmPassword ? "border-red-500" : "border-gray-200"
+                                            "w-full pl-11 pr-12 py-3 bg-soft border rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none text-text-main",
+                                            errors.confirmPassword ? "border-red-500" : "border-border-subtle"
                                         )}
                                         placeholder="Confirm your password"
                                     />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-primary transition-colors focus:outline-none"
+                                    >
+                                        {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                    </button>
                                 </div>
                                 {errors.confirmPassword && <p className="text-xs text-red-500 ml-1 mt-1">{errors.confirmPassword.message}</p>}
                             </div>
@@ -305,7 +338,7 @@ export default function SignUp() {
 
                         <div className="flex items-start gap-2 ml-1">
                             <input type="checkbox" required id="terms" className="mt-1 accent-primary rounded cursor-pointer" />
-                            <label htmlFor="terms" className="text-xs text-gray-500 leading-tight cursor-pointer">
+                            <label htmlFor="terms" className="text-xs text-text-muted leading-tight cursor-pointer">
                                 By signing up, you agree to our <span className="text-primary font-bold">Terms of Service</span> and <span className="text-primary font-bold">Privacy Policy</span>.
                             </label>
                         </div>
@@ -327,7 +360,7 @@ export default function SignUp() {
                         </button>
                     </form>
 
-                    <p className="text-center text-gray-500 font-medium">
+                    <p className="text-center text-text-muted font-medium">
                         Already have an account?{' '}
                         <Link to="/login" className="text-primary hover:text-deep-green font-bold transition-colors">
                             Sign In

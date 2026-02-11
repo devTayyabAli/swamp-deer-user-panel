@@ -13,34 +13,37 @@ import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import Rewards from './pages/Rewards';
 import VerifyEmail from './pages/VerifyEmail';
+import { ThemeProvider } from './context/ThemeContext';
 
 function App() {
   return (
-    <BrowserRouter>
-      <Toaster position="top-right" />
-      <Routes>
-        {/* Public Routes */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="/verify-email/:token" element={<VerifyEmail />} />
+    <ThemeProvider>
+      <BrowserRouter>
+        <Toaster position="top-right" />
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/verify-email/:token" element={<VerifyEmail />} />
 
-        {/* Protected User Routes */}
-        <Route element={<UserLayout />}>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/team" element={<Team />} />
-          <Route path="/investment" element={<Investment />} />
-          <Route path="/income" element={<Income />} />
-          <Route path="/rewards" element={<Rewards />} />
-          <Route path="/withdrawal" element={<Withdrawal />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
-        </Route>
+          {/* Protected User Routes */}
+          <Route element={<UserLayout />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/team" element={<Team />} />
+            <Route path="/investment" element={<Investment />} />
+            <Route path="/income" element={<Income />} />
+            <Route path="/rewards" element={<Rewards />} />
+            <Route path="/withdrawal" element={<Withdrawal />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          </Route>
 
-        <Route path="*" element={<Navigate to="/dashboard" replace />} />
-      </Routes>
-    </BrowserRouter>
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 

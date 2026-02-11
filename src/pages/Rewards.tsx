@@ -69,24 +69,24 @@ export default function Rewards() {
 
             {/* Stats Overview */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-white p-6 rounded-2xl border border-border-light shadow-sm">
+                <div className="bg-card-bg p-6 rounded-2xl border border-border-subtle shadow-sm transition-colors">
                     <div className="flex justify-between items-start mb-1">
-                        <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block">Direct Business</span>
-                        <span className="text-[9px] font-black text-amber-600 bg-amber-50 px-2 py-0.5 rounded uppercase tracking-tighter">Without Product</span>
+                        <span className="text-[10px] font-black text-text-muted/60 uppercase tracking-widest block">Direct Business</span>
+                        <span className="text-[9px] font-black text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 px-2 py-0.5 rounded uppercase tracking-tighter">Without Product</span>
                     </div>
                     <div className="flex items-baseline gap-2">
-                        <span className="text-2xl font-black text-gray-900">{formatCurrency(stats.kpis.totalDirectBusiness)}</span>
-                        <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">Active</span>
+                        <span className="text-2xl font-black text-text-main">{formatCurrency(stats.kpis.totalDirectBusiness)}</span>
+                        <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 px-2 py-0.5 rounded">Active</span>
                     </div>
                 </div>
-                <div className="bg-white p-6 rounded-2xl border border-border-light shadow-sm">
+                <div className="bg-card-bg p-6 rounded-2xl border border-border-light dark:border-white/5 shadow-sm transition-colors">
                     <div className="flex justify-between items-start mb-1">
-                        <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block">Total Team Business</span>
-                        <span className="text-[9px] font-black text-primary bg-primary/5 px-2 py-0.5 rounded uppercase tracking-tighter">With Product</span>
+                        <span className="text-[10px] font-black text-text-muted/60 uppercase tracking-widest block">Total Team Business</span>
+                        <span className="text-[9px] font-black text-primary bg-primary/5 dark:bg-primary/20 px-2 py-0.5 rounded uppercase tracking-tighter">With Product</span>
                     </div>
                     <div className="flex items-baseline gap-2">
-                        <span className="text-2xl font-black text-gray-900">{formatCurrency(stats.kpis.totalBusinessVolume)}</span>
-                        <span className="text-xs font-bold text-primary bg-primary/5 px-2 py-0.5 rounded">Cumulative</span>
+                        <span className="text-2xl font-black text-text-main">{formatCurrency(stats.kpis.totalBusinessVolume)}</span>
+                        <span className="text-xs font-bold text-primary bg-primary/5 dark:bg-primary/20 px-2 py-0.5 rounded">Cumulative</span>
                     </div>
                 </div>
             </div>
@@ -101,10 +101,10 @@ export default function Rewards() {
                         <div
                             key={level.no}
                             className={cn(
-                                "group relative bg-white rounded-3xl border transition-all duration-500 overflow-hidden",
+                                "group relative bg-card-bg rounded-3xl border transition-all duration-500 overflow-hidden",
                                 isAchieved
-                                    ? "border-emerald-200 shadow-lg shadow-emerald-500/5 rotate-0"
-                                    : "border-border-light shadow-sm translate-y-0"
+                                    ? "border-emerald-200 dark:border-emerald-500/30 shadow-lg shadow-emerald-500/5 rotate-0"
+                                    : "border-border-subtle shadow-sm translate-y-0"
                             )}
                         >
                             <div className="p-8">
@@ -114,7 +114,7 @@ export default function Rewards() {
                                             "w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-500",
                                             isAchieved
                                                 ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/30"
-                                                : "bg-neutral-light text-gray-400"
+                                                : "bg-soft text-text-muted/60"
                                         )}>
                                             <Gift className="w-6 h-6" />
                                         </div>
@@ -122,17 +122,17 @@ export default function Rewards() {
                                             <div className="flex items-center gap-2 mb-1">
                                                 <span className="text-[10px] font-black text-primary uppercase tracking-[0.2em]">Level {level.no}</span>
                                                 {isAchieved && (
-                                                    <span className="flex items-center gap-0.5 text-[9px] font-black text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded-full uppercase tracking-tighter">
+                                                    <span className="flex items-center gap-0.5 text-[9px] font-black text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950 px-1.5 py-0.5 rounded-full uppercase tracking-tighter">
                                                         <CheckCircle2 className="w-2.5 h-2.5" />
                                                         Achieved
                                                     </span>
                                                 )}
                                             </div>
-                                            <h3 className="text-xl font-black text-gray-900 leading-tight">{level.name}</h3>
+                                            <h3 className="text-xl font-black text-text-main leading-tight">{level.name}</h3>
                                         </div>
                                     </div>
                                     <div className="text-right">
-                                        <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-1">Reward Value</span>
+                                        <span className="text-[10px] font-black text-text-muted/60 uppercase tracking-widest block mb-1">Reward Value</span>
                                         <span className="text-lg font-black text-accent-gold italic">{level.reward}</span>
                                     </div>
                                 </div>
@@ -141,9 +141,9 @@ export default function Rewards() {
                                 <div className="space-y-4 mb-8">
                                     <div className="flex justify-between items-end">
                                         <div className="space-y-1">
-                                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block">Main Target</span>
+                                            <span className="text-[10px] font-black text-text-muted/60 uppercase tracking-widest block">Main Target</span>
                                             <div className="flex items-center gap-2">
-                                                <span className="text-sm font-bold text-gray-600 tracking-tight">{level.criteria}</span>
+                                                <span className="text-sm font-bold text-text-muted tracking-tight">{level.criteria}</span>
                                             </div>
                                         </div>
                                         <div className="text-right">
@@ -153,7 +153,7 @@ export default function Rewards() {
 
                                     {/* Progress Bar Container */}
                                     <div className="relative">
-                                        <div className="w-full h-3 bg-neutral-light rounded-full overflow-hidden shadow-inner border border-gray-100/50">
+                                        <div className="w-full h-3 bg-soft rounded-full overflow-hidden shadow-inner border border-border-subtle">
                                             <div
                                                 className={cn(
                                                     "h-full transition-all duration-1000 relative overflow-hidden",
@@ -168,11 +168,11 @@ export default function Rewards() {
                                         {!isAchieved && (
                                             <div className="mt-3 flex flex-col gap-1.5">
                                                 <div className="flex justify-between items-center text-[10px] font-bold">
-                                                    <span className="text-gray-400">Remaining (Without Product):</span>
+                                                    <span className="text-text-muted/60">Remaining (Without Product):</span>
                                                     <span className="text-primary tracking-tight">{formatCurrency(level.remainingDirect)}</span>
                                                 </div>
                                                 <div className="flex justify-between items-center text-[10px] font-bold">
-                                                    <span className="text-gray-400">Remaining (With Product):</span>
+                                                    <span className="text-text-muted/60">Remaining (With Product):</span>
                                                     <span className="text-primary tracking-tight">{formatCurrency(level.remainingTotal)}</span>
                                                 </div>
                                             </div>
@@ -181,7 +181,7 @@ export default function Rewards() {
                                 </div>
 
                                 {/* Action Area */}
-                                <div className="pt-6 border-t border-gray-100">
+                                <div className="pt-6 border-t border-border-subtle">
                                     {isAchieved ? (
                                         <div className="flex items-center justify-between">
                                             {level.claimStatus === 'not_claimed' ? (
@@ -195,8 +195,8 @@ export default function Rewards() {
                                                 <div className={cn(
                                                     "w-full py-4 rounded-2xl font-black text-sm flex items-center justify-center gap-3 border-2 border-dashed",
                                                     isClaimed
-                                                        ? "bg-emerald-50 border-emerald-200 text-emerald-700"
-                                                        : "bg-amber-50 border-amber-200 text-amber-700"
+                                                        ? "bg-emerald-50 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-800/50 text-emerald-700 dark:text-emerald-400"
+                                                        : "bg-amber-50 dark:bg-amber-950/20 border-amber-200 dark:border-amber-800/50 text-amber-700 dark:text-amber-400"
                                                 )}>
                                                     {isClaimed ? (
                                                         <>
@@ -213,9 +213,9 @@ export default function Rewards() {
                                             )}
                                         </div>
                                     ) : (
-                                        <div className="flex items-center gap-3 p-4 bg-neutral-light rounded-2xl opacity-60">
-                                            <Lock className="w-5 h-5 text-gray-400" />
-                                            <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Achieve targets to unlock</span>
+                                        <div className="flex items-center gap-3 p-4 bg-soft rounded-2xl opacity-60">
+                                            <Lock className="w-5 h-5 text-text-muted/60" />
+                                            <span className="text-xs font-bold text-text-muted uppercase tracking-widest">Achieve targets to unlock</span>
                                         </div>
                                     )}
                                 </div>
@@ -223,8 +223,8 @@ export default function Rewards() {
 
                             {/* Hover Overlay */}
                             {!isAchieved && (
-                                <div className="absolute inset-0 bg-white/40 backdrop-blur-[1px] opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
-                                    <div className="bg-white/90 px-6 py-3 rounded-2xl shadow-xl border border-border-light scale-90 group-hover:scale-100 transition-transform">
+                                <div className="absolute inset-0 bg-white/40 dark:bg-black/40 backdrop-blur-[1px] opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                                    <div className="bg-card-bg px-6 py-3 rounded-2xl shadow-xl border border-border-subtle scale-90 group-hover:scale-100 transition-transform">
                                         <span className="text-xs font-black text-primary uppercase tracking-widest">Keep growing!</span>
                                     </div>
                                 </div>

@@ -12,6 +12,8 @@ export default function Profile() {
     const { user, loading, error } = useSelector((state: RootState) => state.auth);
     const [editing, setEditing] = React.useState(false);
     const [showPasswordModal, setShowPasswordModal] = React.useState(false);
+    const [profilePicBase64, setProfilePicBase64] = React.useState<string | null>(null);
+    const fileInputRef = React.useRef<HTMLInputElement>(null);
 
     const {
         register: profileRegister,
@@ -48,10 +50,30 @@ export default function Profile() {
     }, [error, dispatch]);
 
     const onProfileSubmit = async (data: any) => {
-        const result = await dispatch(updateProfile(data));
+        const result = await dispatch(updateProfile({
+            ...data,
+            profilePic: profilePicBase64 || user?.profilePic
+        }));
         if (updateProfile.fulfilled.match(result)) {
             toast.success('Profile updated successfully!');
             setEditing(false);
+            setProfilePicBase64(null);
+        }
+    };
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            if (file.size > 2 * 1024 * 1024) { // 2MB limit
+                toast.error('Image size should be less than 2MB');
+                return;
+            }
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setProfilePicBase64(reader.result as string);
+                setEditing(true); // Auto-enable editing mode when a new picture is chosen
+            };
+            reader.readAsDataURL(file);
         }
     };
 
@@ -81,8 +103,8 @@ export default function Profile() {
         <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in duration-700">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Your Profile</h1>
-                    <p className="text-gray-500">Manage your account settings and personal information.</p>
+                    <h1 className="text-2xl font-bold text-text-main tracking-tight">Your Profile</h1>
+                    <p className="text-text-muted">Manage your account settings and personal information.</p>
                 </div>
                 {!editing ? (
                     <button
@@ -98,7 +120,7 @@ export default function Profile() {
                                 setEditing(false);
                                 resetProfile();
                             }}
-                            className="px-6 py-2.5 bg-gray-100 text-gray-600 font-bold rounded-xl hover:bg-gray-200 transition-all"
+                            className="px-6 py-2.5 bg-soft text-text-muted font-bold rounded-xl hover:bg-soft/70 transition-all"
                         >
                             Cancel
                         </button>
@@ -116,26 +138,40 @@ export default function Profile() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {/* Left Card - User Info */}
                 <div className="md:col-span-1 space-y-6">
-                    <div className="bg-white p-8 rounded-2xl border border-border-light shadow-sm text-center">
+                    <div className="bg-card-bg p-8 rounded-2xl border border-border-subtle shadow-sm text-center transition-colors">
                         <div className="relative inline-block mb-4">
-                            <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center border-4 border-white shadow-lg mx-auto overflow-hidden">
-                                <User className="w-12 h-12 text-primary" />
+                            <input
+                                type="file"
+                                ref={fileInputRef}
+                                onChange={handleFileChange}
+                                accept="image/*"
+                                className="hidden"
+                            />
+                            <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center border-4 border-page-bg shadow-lg mx-auto overflow-hidden">
+                                {profilePicBase64 || user?.profilePic ? (
+                                    <img src={profilePicBase64 || user?.profilePic} alt={user?.name} className="w-full h-full object-cover" />
+                                ) : (
+                                    <User className="w-12 h-12 text-primary" />
+                                )}
                             </div>
-                            <button className="absolute bottom-0 right-0 p-1.5 bg-white rounded-full shadow-md border border-border-light text-primary hover:text-deep-green transition-colors">
+                            <button
+                                onClick={() => fileInputRef.current?.click()}
+                                className="absolute bottom-0 right-0 p-1.5 bg-card-bg rounded-full shadow-md border border-border-subtle text-primary hover:text-deep-green transition-colors"
+                            >
                                 <Camera className="w-4 h-4" />
                             </button>
                         </div>
-                        <h3 className="text-lg font-bold text-gray-900">{user?.name}</h3>
-                        <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-6">
+                        <h3 className="text-lg font-bold text-text-main">{user?.name}</h3>
+                        <p className="text-xs font-bold text-text-muted/60 uppercase tracking-widest mb-6">
                             {user?.role === 'super_admin' ? 'Administrator' : (user?.currentLevel ? `Level ${user.currentLevel} Investor` : 'Platinum Investor')}
                         </p>
 
-                        <div className="pt-6 border-t border-gray-100 flex flex-col gap-3">
-                            <div className="flex items-center gap-3 text-sm text-gray-600">
-                                <Calendar className="w-4 h-4 text-gray-400" />
+                        <div className="pt-6 border-t border-border-subtle flex flex-col gap-3">
+                            <div className="flex items-center gap-3 text-sm text-text-muted">
+                                <Calendar className="w-4 h-4 text-text-muted/60" />
                                 {`Joined ${formattedJoinedDate}`}
                             </div>
-                            <div className="flex items-center gap-3 text-sm text-gray-600">
+                            <div className="flex items-center gap-3 text-sm text-text-muted">
                                 <Shield className="w-4 h-4 text-emerald-500" />
                                 Account Verified
                             </div>
@@ -165,68 +201,68 @@ export default function Profile() {
 
                 {/* Right Card - Form */}
                 <div className="md:col-span-2">
-                    <div className="bg-white p-8 rounded-2xl border border-border-light shadow-sm">
-                        <h3 className="text-lg font-bold text-gray-900 mb-8 border-b border-gray-100 pb-4">Personal Information</h3>
+                    <div className="bg-card-bg p-8 rounded-2xl border border-border-subtle shadow-sm transition-colors">
+                        <h3 className="text-lg font-bold text-text-main mb-8 border-b border-border-subtle pb-4">Personal Information</h3>
                         <form className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                             <div className="space-y-2">
-                                <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Full Name</label>
+                                <label className="text-xs font-bold text-text-muted/60 uppercase tracking-widest">Full Name</label>
                                 <div className="relative">
-                                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
                                     <input
                                         {...profileRegister('name', { required: 'Full name is required' })}
                                         disabled={!editing}
                                         type="text"
                                         className={cn(
-                                            "w-full pl-10 pr-4 py-3 bg-neutral-light border rounded-xl focus:ring-2 focus:ring-primary/20 outline-none font-bold text-sm disabled:opacity-70 transition-all",
-                                            profileErrors.name ? "border-red-500" : "border-transparent"
+                                            "w-full pl-10 pr-4 py-3 bg-soft border rounded-xl focus:ring-2 focus:ring-primary/20 outline-none font-bold text-sm disabled:opacity-70 transition-all text-text-main",
+                                            profileErrors.name ? "border-red-500" : "border-border-subtle"
                                         )}
                                     />
                                 </div>
                                 {profileErrors.name && <p className="text-[10px] text-red-500">{profileErrors.name.message}</p>}
                             </div>
                             <div className="space-y-2">
-                                <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Email Address</label>
+                                <label className="text-xs font-bold text-text-muted/60 uppercase tracking-widest">Email Address</label>
                                 <div className="relative">
-                                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
                                     <input
                                         disabled
                                         type="email"
                                         value={user?.email}
-                                        className="w-full pl-10 pr-4 py-3 bg-neutral-light border-none rounded-xl font-bold text-sm opacity-50 cursor-not-allowed"
+                                        className="w-full pl-10 pr-4 py-3 bg-soft border border-border-subtle rounded-xl font-bold text-sm opacity-50 cursor-not-allowed text-text-main"
                                     />
                                 </div>
                             </div>
                             <div className="space-y-2">
-                                <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Phone Number</label>
+                                <label className="text-xs font-bold text-text-muted/60 uppercase tracking-widest">Phone Number</label>
                                 <div className="relative">
-                                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
                                     <input
                                         {...profileRegister('phone')}
                                         disabled={!editing}
                                         type="text"
-                                        className="w-full pl-10 pr-4 py-3 bg-neutral-light border border-transparent rounded-xl focus:ring-2 focus:ring-primary/20 outline-none font-bold text-sm disabled:opacity-70 transition-all"
+                                        className="w-full pl-10 pr-4 py-3 bg-soft border border-border-subtle rounded-xl focus:ring-2 focus:ring-primary/20 outline-none font-bold text-sm disabled:opacity-70 transition-all text-text-main"
                                     />
                                 </div>
                             </div>
                             <div className="space-y-2">
-                                <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Location / Address</label>
+                                <label className="text-xs font-bold text-text-muted/60 uppercase tracking-widest">Location / Address</label>
                                 <div className="relative">
-                                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
                                     <input
                                         {...profileRegister('address')}
                                         disabled={!editing}
                                         type="text"
                                         placeholder="Enter your location"
-                                        className="w-full pl-10 pr-4 py-3 bg-neutral-light border border-transparent rounded-xl focus:ring-2 focus:ring-primary/20 outline-none font-bold text-sm disabled:opacity-70 transition-all"
+                                        className="w-full pl-10 pr-4 py-3 bg-soft border border-border-subtle rounded-xl focus:ring-2 focus:ring-primary/20 outline-none font-bold text-sm disabled:opacity-70 transition-all text-text-main"
                                     />
                                 </div>
                             </div>
                         </form>
 
-                        <h3 className="text-lg font-bold text-gray-900 mt-12 mb-8 border-b border-gray-100 pb-4">Security</h3>
+                        <h3 className="text-lg font-bold text-text-main mt-12 mb-8 border-b border-border-subtle pb-4">Security</h3>
                         <div className="space-y-4">
-                            <div className="flex items-center justify-between p-4 bg-red-50 rounded-2xl border border-red-100 italic">
-                                <span className="text-sm font-bold text-red-700">Change Password</span>
+                            <div className="flex items-center justify-between p-4 bg-red-50 dark:bg-red-900/10 rounded-2xl border border-red-100 dark:border-red-900/20 italic">
+                                <span className="text-sm font-bold text-red-700 dark:text-red-400">Change Password</span>
                                 <button
                                     onClick={() => setShowPasswordModal(true)}
                                     className="text-xs font-black text-red-700 underline uppercase tracking-widest"
@@ -242,22 +278,22 @@ export default function Profile() {
             {/* Password Change Modal */}
             {showPasswordModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-                    <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
-                        <div className="px-6 py-4 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
-                            <h3 className="font-bold text-gray-900">Change Password</h3>
-                            <button onClick={() => setShowPasswordModal(false)} className="text-gray-400 hover:text-gray-600"><X className="w-5 h-5" /></button>
+                    <div className="w-full max-w-md bg-card-bg rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
+                        <div className="px-6 py-4 bg-soft/50 border-b border-border-subtle flex items-center justify-between">
+                            <h3 className="font-bold text-text-main">Change Password</h3>
+                            <button onClick={() => setShowPasswordModal(false)} className="text-text-muted hover:text-text-muted dark:hover:text-gray-300"><X className="w-5 h-5" /></button>
                         </div>
                         <form onSubmit={handlePasswordSubmit(onPasswordSubmit)} className="p-6 space-y-4">
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Current Password</label>
+                                <label className="text-xs font-bold text-text-muted uppercase tracking-widest">Current Password</label>
                                 <div className="relative">
-                                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted/60" />
                                     <input
                                         {...passwordRegister('currentPassword', { required: 'Current password is required' })}
                                         type="password"
                                         className={cn(
-                                            "w-full pl-10 pr-4 py-2.5 bg-gray-50 border rounded-xl focus:ring-2 focus:ring-primary/20 outline-none text-sm",
-                                            passwordErrors.currentPassword ? "border-red-500" : "border-gray-200"
+                                            "w-full pl-10 pr-4 py-2.5 bg-soft border rounded-xl focus:ring-2 focus:ring-primary/20 outline-none text-sm text-text-main",
+                                            passwordErrors.currentPassword ? "border-red-500" : "border-border-subtle"
                                         )}
                                         placeholder="••••••••"
                                     />
@@ -265,9 +301,9 @@ export default function Profile() {
                                 {passwordErrors.currentPassword && <p className="text-[10px] text-red-500">{passwordErrors.currentPassword.message}</p>}
                             </div>
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">New Password</label>
+                                <label className="text-xs font-bold text-text-muted uppercase tracking-widest">New Password</label>
                                 <div className="relative">
-                                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted/60" />
                                     <input
                                         {...passwordRegister('newPassword', {
                                             required: 'New password is required',
@@ -275,8 +311,8 @@ export default function Profile() {
                                         })}
                                         type="password"
                                         className={cn(
-                                            "w-full pl-10 pr-4 py-2.5 bg-gray-50 border rounded-xl focus:ring-2 focus:ring-primary/20 outline-none text-sm",
-                                            passwordErrors.newPassword ? "border-red-500" : "border-gray-200"
+                                            "w-full pl-10 pr-4 py-2.5 bg-gray-50 dark:bg-white/5 border rounded-xl focus:ring-2 focus:ring-primary/20 outline-none text-sm text-text-main",
+                                            passwordErrors.newPassword ? "border-red-500" : "border-gray-200 dark:border-white/10"
                                         )}
                                         placeholder="••••••••"
                                     />
@@ -284,9 +320,9 @@ export default function Profile() {
                                 {passwordErrors.newPassword && <p className="text-[10px] text-red-500">{passwordErrors.newPassword.message}</p>}
                             </div>
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Confirm New Password</label>
+                                <label className="text-xs font-bold text-text-muted uppercase tracking-widest">Confirm New Password</label>
                                 <div className="relative">
-                                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted/60" />
                                     <input
                                         {...passwordRegister('confirmPassword', {
                                             required: 'Please confirm your new password',
@@ -294,8 +330,8 @@ export default function Profile() {
                                         })}
                                         type="password"
                                         className={cn(
-                                            "w-full pl-10 pr-4 py-2.5 bg-gray-50 border rounded-xl focus:ring-2 focus:ring-primary/20 outline-none text-sm",
-                                            passwordErrors.confirmPassword ? "border-red-500" : "border-gray-200"
+                                            "w-full pl-10 pr-4 py-2.5 bg-gray-50 dark:bg-white/5 border rounded-xl focus:ring-2 focus:ring-primary/20 outline-none text-sm dark:text-white",
+                                            passwordErrors.confirmPassword ? "border-red-500" : "border-gray-200 dark:border-white/10"
                                         )}
                                         placeholder="••••••••"
                                     />

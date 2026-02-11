@@ -8,8 +8,15 @@
   --color-forest-green: #0a2e1e;
   --color-deep-green: #113d2a;
   --color-swamp-deer: #1b4332;
-  --color-neutral-light: #f8f9f8;
+  --color-neutral-light: var(--bg-soft);
   --color-border-light: #e5e7eb;
+
+  /* Semantic Theme Tokens */
+  --color-page-bg: var(--page-bg);
+  --color-card-bg: var(--card-bg);
+  --color-text-main: var(--text-main);
+  --color-text-muted: var(--text-muted);
+  --color-border-subtle: var(--border-subtle);
 
   --font-display: "Manrope", sans-serif;
 
@@ -18,9 +25,30 @@
   --radius-xl: 0.75rem;
 }
 
+:root {
+  --page-bg: #f8f9f8;
+  --card-bg: #ffffff;
+  --bg-soft: #f3f5f3;
+  --text-main: #111813;
+  --text-muted: #6b7280;
+  --border-subtle: #e5e7eb;
+}
+
+html.dark,
+.dark {
+  --page-bg: #040905;
+  --card-bg: #111c13;
+  --bg-soft: rgba(255, 255, 255, 0.06);
+  --text-main: #f0fdf4;
+  --text-muted: #94a3b8;
+  --border-subtle: rgba(255, 255, 255, 0.15);
+}
+
 @layer base {
   body {
-    @apply bg-neutral-light text-[#111813] font-display;
+    background-color: var(--page-bg);
+    color: var(--text-main);
+    @apply font-display transition-colors duration-300;
   }
 }
 

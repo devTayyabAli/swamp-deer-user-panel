@@ -56,15 +56,15 @@ export default function Income() {
         <div className="space-y-8 animate-in fade-in duration-700">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Earnings & Profit</h1>
-                    <p className="text-gray-500">Track your referral income and investment ROI.</p>
+                    <h1 className="text-2xl font-bold text-text-main tracking-tight">Earnings & Profit</h1>
+                    <p className="text-text-muted">Track your referral income and investment ROI.</p>
                 </div>
-                <div className="flex items-center gap-2 bg-white p-1 rounded-xl border border-border-light">
+                <div className="flex items-center gap-2 bg-card-bg p-1 rounded-xl border border-border-subtle transition-colors">
                     <button
                         onClick={() => setActiveSubTab('summary')}
                         className={cn(
                             "px-4 py-2 text-sm font-bold rounded-lg transition-all",
-                            activeSubTab === 'summary' ? "bg-primary text-white" : "text-gray-500 hover:text-primary"
+                            activeSubTab === 'summary' ? "bg-primary text-white" : "text-text-muted hover:text-primary dark:hover:text-primary"
                         )}
                     >
                         Profit Summary
@@ -73,7 +73,7 @@ export default function Income() {
                         onClick={() => setActiveSubTab('levels')}
                         className={cn(
                             "px-4 py-2 text-sm font-bold rounded-lg transition-all",
-                            activeSubTab === 'levels' ? "bg-primary text-white" : "text-gray-500 hover:text-primary"
+                            activeSubTab === 'levels' ? "bg-primary text-white" : "text-text-muted hover:text-primary dark:hover:text-primary"
                         )}
                     >
                         Level Income
@@ -86,33 +86,33 @@ export default function Income() {
                     {/* Summary Cards */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         {profitSummary.map((item) => (
-                            <div key={item.label} className="bg-white p-8 rounded-2xl border border-border-light shadow-sm flex items-center gap-6">
-                                <div className={cn("p-4 rounded-2xl", item.bg)}>
+                            <div key={item.label} className="bg-card-bg p-8 rounded-2xl border border-border-subtle shadow-sm flex items-center gap-6">
+                                <div className={cn("p-4 rounded-2xl", item.bg, "dark:bg-opacity-10")}>
                                     <item.icon className={cn("w-8 h-8", item.color)} />
                                 </div>
                                 <div>
-                                    <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">{item.label}</p>
-                                    <h3 className="text-2xl font-black text-gray-900 tracking-tight">Rs {item.value.toLocaleString()}</h3>
+                                    <p className="text-xs font-bold text-text-muted/60 uppercase tracking-widest mb-1">{item.label}</p>
+                                    <h3 className="text-2xl font-black text-text-main tracking-tight">Rs {item.value.toLocaleString()}</h3>
                                 </div>
                             </div>
                         ))}
                     </div>
 
-                    <div className="bg-white p-8 rounded-2xl border border-border-light shadow-sm">
-                        <h3 className="text-lg font-bold text-gray-900 mb-6 flex items-center gap-2">
+                    <div className="bg-card-bg p-8 rounded-2xl border border-border-light dark:border-white/5 shadow-sm">
+                        <h3 className="text-lg font-bold text-text-main mb-6 flex items-center gap-2">
                             <PieChart className="w-5 h-5 text-primary" />
                             Total Earnings Breakdown
                         </h3>
                         <div className="space-y-6">
                             <div className="flex items-center justify-between">
-                                <span className="text-4xl font-black text-gray-900">Rs {summary.total.toLocaleString()}</span>
-                                <div className="flex items-center gap-1.5 px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-xs font-bold border border-emerald-200">
+                                <span className="text-4xl font-black text-text-main">Rs {summary.total.toLocaleString()}</span>
+                                <div className="flex items-center gap-1.5 px-3 py-1 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 rounded-full text-xs font-bold border border-emerald-200 dark:border-emerald-800/50">
                                     <ArrowUpRight className="w-3.5 h-3.5" />
                                     Live Data
                                 </div>
                             </div>
 
-                            <div className="w-full h-3 bg-gray-100 rounded-full flex overflow-hidden">
+                            <div className="w-full h-3 bg-soft rounded-full flex overflow-hidden">
                                 <div className="h-full bg-accent-gold" style={{ width: `${stakingPercent}% ` }} />
                                 <div className="h-full bg-primary" style={{ width: `${levelPercent}% ` }} />
                                 <div className="h-full bg-blue-500" style={{ width: `${referralPercent}% ` }} />
@@ -121,15 +121,15 @@ export default function Income() {
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                 <div className="flex items-center gap-2">
                                     <div className="w-3 h-3 rounded-full bg-accent-gold" />
-                                    <span className="text-sm font-bold text-gray-600">Staking ({stakingPercent}%)</span>
+                                    <span className="text-sm font-bold text-text-muted">Staking ({stakingPercent}%)</span>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <div className="w-3 h-3 rounded-full bg-primary" />
-                                    <span className="text-sm font-bold text-gray-600">Level ({levelPercent}%)</span>
+                                    <span className="text-sm font-bold text-text-muted">Level ({levelPercent}%)</span>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <div className="w-3 h-3 rounded-full bg-blue-500" />
-                                    <span className="text-sm font-bold text-gray-600">Referral ({referralPercent}%)</span>
+                                    <span className="text-sm font-bold text-text-muted">Referral ({referralPercent}%)</span>
                                 </div>
                             </div>
                         </div>
@@ -138,22 +138,22 @@ export default function Income() {
             ) : (
                 <div className="space-y-6">
                     {/* Filters & Total */}
-                    <div className="bg-white p-6 rounded-2xl border border-border-light shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div className="bg-card-bg p-6 rounded-2xl border border-border-subtle shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div className="flex flex-wrap items-center gap-4">
                             <div className="flex items-center gap-2 w-full md:w-auto">
                                 <div className="flex items-center gap-1.5">
-                                    <Filter className="w-4 h-4 text-gray-400" />
-                                    <span className="text-sm font-bold text-gray-500">Filters:</span>
+                                    <Filter className="w-4 h-4 text-text-muted/60" />
+                                    <span className="text-sm font-bold text-text-muted">Filters:</span>
                                 </div>
                                 <select
                                     value={filterType}
                                     onChange={(e) => setFilterType(e.target.value)}
-                                    className="px-3 py-2 rounded-lg border border-gray-200 text-sm font-medium focus:ring-2 focus:ring-primary/20 outline-none"
+                                    className="px-3 py-2 rounded-lg border border-border-subtle bg-soft text-sm font-bold text-text-main focus:ring-2 focus:ring-primary/20 outline-none dark:[color-scheme:dark]"
                                 >
-                                    <option value="">All Types</option>
-                                    <option value="level_income">Level Income</option>
-                                    <option value="staking">Staking Bonus</option>
-                                    <option value="direct_income">Referral Bonus</option>
+                                    <option value="" className="dark:bg-dark-surface">All Types</option>
+                                    <option value="level_income" className="dark:bg-dark-surface">Level Income</option>
+                                    <option value="staking" className="dark:bg-dark-surface">Staking Bonus</option>
+                                    <option value="direct_income" className="dark:bg-dark-surface">Referral Bonus</option>
                                 </select>
                             </div>
                             <div className="flex items-center gap-2 w-full md:w-auto">
@@ -161,72 +161,77 @@ export default function Income() {
                                     type="date"
                                     value={startDate}
                                     onChange={(e) => setStartDate(e.target.value)}
-                                    className="px-3 py-2 rounded-lg border border-gray-200 text-sm font-medium focus:ring-2 focus:ring-primary/20 outline-none"
+                                    className="px-3 py-2 rounded-lg border border-border-subtle bg-soft text-sm font-bold text-text-main focus:ring-2 focus:ring-primary/20 outline-none dark:[color-scheme:dark]"
                                 />
-                                <span className="text-gray-400">-</span>
+                                <span className="text-text-muted">-</span>
                                 <input
                                     type="date"
                                     value={endDate}
                                     onChange={(e) => setEndDate(e.target.value)}
-                                    className="px-3 py-2 rounded-lg border border-gray-200 text-sm font-medium focus:ring-2 focus:ring-primary/20 outline-none"
+                                    className="px-3 py-2 rounded-lg border border-border-subtle bg-soft text-sm font-bold text-text-main focus:ring-2 focus:ring-primary/20 outline-none dark:[color-scheme:dark]"
                                 />
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-4 bg-emerald-50 px-4 py-2 rounded-xl border border-emerald-100">
-                            <span className="text-sm font-bold text-emerald-800 uppercase tracking-widest">Total Filtered:</span>
-                            <span className="text-xl font-black text-emerald-600">Rs {(filteredTotal || 0).toLocaleString()}</span>
+                        <div className="flex items-center gap-4 bg-emerald-50 dark:bg-emerald-950/20 px-4 py-2 rounded-xl border border-emerald-100 dark:border-emerald-800/50">
+                            <span className="text-sm font-bold text-emerald-800 dark:text-emerald-400 uppercase tracking-widest">Total Filtered:</span>
+                            <span className="text-xl font-black text-emerald-600 dark:text-emerald-500">Rs {(filteredTotal || 0).toLocaleString()}</span>
                         </div>
                     </div>
 
-                    <div className="bg-white rounded-2xl border border-border-light shadow-sm overflow-hidden animate-in slide-in-from-bottom-4 duration-500">
+                    <div className="bg-card-bg rounded-2xl border border-border-subtle shadow-sm overflow-hidden animate-in slide-in-from-bottom-4 duration-500">
                         <div className="overflow-x-auto">
                             <table className="w-full text-left">
-                                <thead className="bg-neutral-light/50 border-b border-gray-100">
+                                <thead className="bg-soft/50 border-b border-border-subtle">
                                     <tr>
-                                        <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Type / Source</th>
-                                        <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Income Amount</th>
-                                        <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Date Earned</th>
-                                        <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider text-right">Status</th>
+                                        <th className="px-6 py-4 text-xs font-bold text-text-muted uppercase tracking-wider">Type / Source</th>
+                                        <th className="px-6 py-4 text-xs font-bold text-text-muted uppercase tracking-wider">Income Amount</th>
+                                        <th className="px-6 py-4 text-xs font-bold text-text-muted uppercase tracking-wider">Date Earned</th>
+                                        <th className="px-6 py-4 text-xs font-bold text-text-muted uppercase tracking-wider text-right">Status</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-gray-100">
+                                <tbody className="divide-y divide-border-subtle">
                                     {items.map((reward, idx) => (
-                                        <tr key={idx} className="hover:bg-neutral-light/50 transition-colors group">
+                                        <tr key={idx} className="hover:bg-soft/50 transition-colors group">
                                             <td className="px-6 py-4">
                                                 <div className="flex items-center gap-3">
-                                                    <div className="w-10 h-10 rounded-xl bg-primary/5 flex items-center justify-center text-primary font-bold text-sm border border-primary/10 capitalize">
+                                                    <div className="w-10 h-10 rounded-xl bg-primary/5 dark:bg-primary/20 flex items-center justify-center text-primary dark:text-primary-light font-bold text-sm border border-primary/10 capitalize">
                                                         {reward.type ? reward.type.charAt(0) : 'R'}
                                                     </div>
                                                     <div>
-                                                        <span className="block text-sm font-bold text-gray-900 capitalize mb-0.5">
+                                                        <span className="block text-sm font-bold text-text-main capitalize mb-0.5">
                                                             {reward.type ? reward.type.replace('_', ' ') : 'Reward'}
                                                         </span>
                                                         {reward.stakeId?.user && (
-                                                            <div className="flex items-center gap-1.5 text-xs text-gray-500 font-medium">
+                                                            <div className="flex items-center gap-1.5 text-xs text-text-muted font-medium">
                                                                 <User className="w-3 h-3" />
                                                                 from {reward.stakeId.user.name} ({reward.stakeId.user.userName || 'Unknown'})
                                                             </div>
                                                         )}
-                                                        {reward.productStatus && (
-                                                            <span className="text-[10px] text-blue-500 bg-blue-50 px-1.5 py-0.5 rounded ml-1 border border-blue-100 capitalize">
-                                                                {reward.productStatus.replace('_', ' ')}
+                                                        {reward.stakeId?.productStatus && (
+                                                            <span className={cn(
+                                                                "inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-widest border ml-2",
+                                                                reward.stakeId.productStatus === 'with_product'
+                                                                    ? "bg-primary/10 text-primary border-primary/20"
+                                                                    : "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20"
+                                                            )}>
+                                                                {reward.stakeId.productStatus.replace('_', ' ')}
                                                             </span>
                                                         )}
                                                     </div>
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4">
-                                                <span className="text-sm font-black text-emerald-600">+Rs {reward.amount.toLocaleString()}</span>
+                                                <span className="text-sm font-black text-emerald-600 dark:text-emerald-500">+Rs {reward.amount.toLocaleString()}</span>
                                             </td>
                                             <td className="px-6 py-4">
-                                                <div className="flex items-center gap-1.5 text-sm text-gray-500 font-medium">
-                                                    <Calendar className="w-4 h-4" />
+                                                <div className="flex items-center gap-1.5 text-sm text-text-muted font-medium">
+                                                    <Calendar className="w-4 h-4 dark:text-text-muted" />
                                                     {new Date(reward.createdAt).toLocaleDateString()}
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4 text-right">
-                                                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-emerald-100 text-emerald-700 border border-emerald-200">
+                                                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 dark:border-emerald-500/30">
                                                     Processed
                                                 </span>
                                             </td>
@@ -234,7 +239,7 @@ export default function Income() {
                                     ))}
                                     {items.length === 0 && !loading && (
                                         <tr>
-                                            <td colSpan={4} className="px-6 py-12 text-center text-gray-500 font-medium">
+                                            <td colSpan={4} className="px-6 py-12 text-center text-text-muted font-medium">
                                                 No reward records found.
                                             </td>
                                         </tr>
@@ -245,27 +250,27 @@ export default function Income() {
 
                         {/* Pagination Controls */}
                         {items.length > 0 && (
-                            <div className="flex items-center justify-between px-6 py-4 border-t border-gray-100 bg-gray-50/50">
-                                <p className="text-sm text-gray-500">
+                            <div className="flex items-center justify-between px-6 py-4 border-t border-border-subtle bg-soft/50">
+                                <p className="text-sm text-text-muted">
                                     Showing {items.length} of {total} records
                                 </p>
                                 <div className="flex items-center gap-2">
                                     <button
                                         onClick={() => handlePageChange(page - 1)}
                                         disabled={page === 1 || loading}
-                                        className="p-2 rounded-lg hover:bg-white border border-transparent hover:border-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                                        className="p-2 rounded-lg hover:bg-soft border border-transparent hover:border-border-subtle disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                                     >
-                                        <ChevronLeft className="w-5 h-5 text-gray-600" />
+                                        <ChevronLeft className="w-5 h-5 text-text-muted" />
                                     </button>
-                                    <span className="text-sm font-bold text-gray-700">
+                                    <span className="text-sm font-bold text-text-main/80">
                                         Page {page} of {pages}
                                     </span>
                                     <button
                                         onClick={() => handlePageChange(page + 1)}
                                         disabled={page === pages || loading}
-                                        className="p-2 rounded-lg hover:bg-white border border-transparent hover:border-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                                        className="p-2 rounded-lg hover:bg-soft border border-transparent hover:border-border-subtle disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                                     >
-                                        <ChevronRight className="w-5 h-5 text-gray-600" />
+                                        <ChevronRight className="w-5 h-5 text-text-muted" />
                                     </button>
                                 </div>
                             </div>

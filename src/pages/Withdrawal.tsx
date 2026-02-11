@@ -49,15 +49,15 @@ export default function Withdrawal() {
         <div className="space-y-8 animate-in fade-in duration-700">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Withdrawal</h1>
-                    <p className="text-gray-500">Access your earnings and manage withdrawal requests.</p>
+                    <h1 className="text-2xl font-bold text-text-main tracking-tight">Withdrawal</h1>
+                    <p className="text-text-muted">Access your earnings and manage withdrawal requests.</p>
                 </div>
-                <div className="bg-white p-1 rounded-xl border border-border-light flex items-center gap-1 overflow-x-auto no-scrollbar shadow-sm">
+                <div className="bg-card-bg p-1 rounded-xl border border-border-subtle flex items-center gap-1 overflow-x-auto no-scrollbar shadow-sm transition-colors">
                     <button
                         onClick={() => setActiveTab('request')}
                         className={cn(
                             "px-6 py-2.5 text-sm font-bold rounded-lg transition-all whitespace-nowrap",
-                            activeTab === 'request' ? "bg-primary text-white shadow-lg shadow-primary/20" : "text-gray-500 hover:text-primary hover:bg-neutral-light"
+                            activeTab === 'request' ? "bg-primary text-white shadow-lg shadow-primary/20" : "text-text-muted hover:text-primary dark:hover:text-primary hover:bg-soft"
                         )}
                     >
                         Request
@@ -66,7 +66,7 @@ export default function Withdrawal() {
                         onClick={() => setActiveTab('history')}
                         className={cn(
                             "px-6 py-2.5 text-sm font-bold rounded-lg transition-all whitespace-nowrap",
-                            activeTab === 'history' ? "bg-primary text-white shadow-lg shadow-primary/20" : "text-gray-500 hover:text-primary hover:bg-neutral-light"
+                            activeTab === 'history' ? "bg-primary text-white shadow-lg shadow-primary/20" : "text-text-muted hover:text-primary dark:hover:text-primary hover:bg-neutral-light dark:hover:bg-white/5"
                         )}
                     >
                         History
@@ -106,45 +106,45 @@ export default function Withdrawal() {
                         </div>
 
                         {/* Request Form */}
-                        <div className="bg-white p-8 rounded-2xl border border-border-light shadow-sm">
-                            <h3 className="text-lg font-bold text-gray-900 mb-6">Request Withdrawal</h3>
+                        <div className="bg-card-bg p-8 rounded-2xl border border-border-subtle shadow-sm transition-colors">
+                            <h3 className="text-lg font-bold text-text-main mb-6">Request Withdrawal</h3>
                             <form onSubmit={handleWithdraw} className="space-y-6">
                                 <div className="space-y-2">
-                                    <label className="text-sm font-bold text-gray-700">Withdrawal Amount</label>
+                                    <label className="text-sm font-bold text-text-main/80">Withdrawal Amount</label>
                                     <div className="relative">
-                                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">Rs</span>
+                                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted font-bold">Rs</span>
                                         <input
                                             type="number"
                                             placeholder="0.00"
                                             value={amount}
                                             onChange={(e) => setAmount(e.target.value)}
-                                            className="w-full pl-12 pr-4 py-3.5 bg-neutral-light border-none rounded-xl focus:ring-2 focus:ring-primary/20 outline-none font-bold text-lg"
+                                            className="w-full pl-12 pr-4 py-3.5 bg-soft border border-border-subtle rounded-xl focus:ring-2 focus:ring-primary/20 outline-none font-bold text-lg text-text-main"
                                             required
                                             min="50"
                                             step="0.01"
                                         />
                                     </div>
-                                    <p className="text-xs text-gray-400 italic font-medium">Fee: 5% Gross withdrawal amount will be deducted.</p>
+                                    <p className="text-xs text-text-muted/60 italic font-medium">Fee: 5% Gross withdrawal amount will be deducted.</p>
                                 </div>
 
                                 <div className="space-y-4">
-                                    <label className="text-sm font-bold text-gray-700">Withdrawal Method</label>
+                                    <label className="text-sm font-bold text-text-main/80">Withdrawal Method</label>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         <div
                                             onClick={() => setMethod('USDT')}
                                             className={cn(
                                                 "p-4 rounded-2xl relative cursor-pointer transition-all border-2",
-                                                method === 'USDT' ? "bg-primary/5 border-primary ring-2 ring-primary/10" : "bg-white border-gray-100 hover:border-gray-200"
+                                                method === 'USDT' ? "bg-primary/5 dark:bg-primary/10 border-primary ring-2 ring-primary/10" : "bg-card-bg border-border-subtle hover:border-border-subtle/70"
                                             )}
                                         >
                                             <div className={cn(
                                                 "w-10 h-10 rounded-xl flex items-center justify-center mb-4",
-                                                method === 'USDT' ? "bg-primary text-white" : "bg-gray-100 text-gray-500"
+                                                method === 'USDT' ? "bg-primary text-white" : "bg-soft text-text-muted"
                                             )}>
                                                 <Banknote className="w-6 h-6" />
                                             </div>
-                                            <h4 className={cn("font-bold mb-1 text-sm", method === 'USDT' ? "text-primary" : "text-gray-900")}>Cash hand over</h4>
-                                            <p className={cn("text-xs font-medium", method === 'USDT' ? "text-primary/60" : "text-gray-500")}>Cash hand over</p>
+                                            <h4 className={cn("font-bold mb-1 text-sm", method === 'USDT' ? "text-primary" : "text-text-main")}>Cash hand over</h4>
+                                            <p className={cn("text-xs font-medium", method === 'USDT' ? "text-primary/60" : "text-text-muted")}>Cash hand over</p>
                                             {method === 'USDT' && (
                                                 <div className="absolute top-4 right-4 text-primary">
                                                     <CheckCircle className="w-5 h-5 fill-primary text-white" />
@@ -155,17 +155,17 @@ export default function Withdrawal() {
                                             onClick={() => setMethod('BANK')}
                                             className={cn(
                                                 "p-4 rounded-2xl relative cursor-pointer transition-all border-2",
-                                                method === 'BANK' ? "bg-primary/5 border-primary ring-2 ring-primary/10" : "bg-white border-gray-100 hover:border-gray-200"
+                                                method === 'BANK' ? "bg-primary/5 dark:bg-primary/10 border-primary ring-2 ring-primary/10" : "bg-soft border-border-subtle hover:border-border-subtle/70"
                                             )}
                                         >
                                             <div className={cn(
                                                 "w-10 h-10 rounded-xl flex items-center justify-center mb-4",
-                                                method === 'BANK' ? "bg-primary text-white" : "bg-gray-100 text-gray-500"
+                                                method === 'BANK' ? "bg-primary text-white" : "bg-soft text-text-muted"
                                             )}>
                                                 <Landmark className="w-6 h-6" />
                                             </div>
-                                            <h4 className={cn("font-bold mb-1 text-sm", method === 'BANK' ? "text-primary" : "text-gray-900")}>Bank Transfer</h4>
-                                            <p className={cn("text-xs font-medium", method === 'BANK' ? "text-primary/60" : "text-gray-500")}>Internal Review Req.</p>
+                                            <h4 className={cn("font-bold mb-1 text-sm", method === 'BANK' ? "text-primary" : "text-text-main")}>Bank Transfer</h4>
+                                            <p className={cn("text-xs font-medium", method === 'BANK' ? "text-primary/60" : "text-text-muted")}>Internal Review Req.</p>
                                             {method === 'BANK' && (
                                                 <div className="absolute top-4 right-4 text-primary">
                                                     <CheckCircle className="w-5 h-5 fill-primary text-white" />
@@ -194,21 +194,21 @@ export default function Withdrawal() {
                     </div>
 
                     <div className="space-y-6 animate-in slide-in-from-right-4 duration-500">
-                        <div className="bg-accent-gold/5 p-6 rounded-2xl border border-accent-gold/10">
+                        <div className="bg-accent-gold/5 p-6 rounded-2xl border border-accent-gold/10 dark:bg-accent-gold/10 dark:border-accent-gold/20">
                             <h4 className="text-sm font-bold text-accent-gold uppercase tracking-wider mb-4 flex items-center gap-2">
                                 <Clock className="w-4 h-4" />
                                 Important Notes
                             </h4>
                             <ul className="space-y-3">
-                                <li className="flex gap-3 text-xs font-medium text-gray-600 leading-relaxed">
+                                <li className="flex gap-3 text-xs font-medium text-text-muted leading-relaxed">
                                     <div className="w-1.5 h-1.5 rounded-full bg-accent-gold shrink-0 mt-1" />
                                     Withdrawals are processed within 24 to 48 working hours.
                                 </li>
-                                <li className="flex gap-3 text-xs font-medium text-gray-600 leading-relaxed">
+                                <li className="flex gap-3 text-xs font-medium text-text-muted leading-relaxed">
                                     <div className="w-1.5 h-1.5 rounded-full bg-accent-gold shrink-0 mt-1" />
                                     Maximum 5% service charge applies to all methods.
                                 </li>
-                                <li className="flex gap-3 text-xs font-medium text-gray-600 leading-relaxed">
+                                <li className="flex gap-3 text-xs font-medium text-text-muted leading-relaxed">
                                     <div className="w-1.5 h-1.5 rounded-full bg-accent-gold shrink-0 mt-1" />
                                     Ensure your wallet addresses are correct before submitting.
                                 </li>
@@ -217,49 +217,49 @@ export default function Withdrawal() {
                     </div>
                 </div>
             ) : (
-                <div className="bg-white rounded-2xl border border-border-light shadow-sm overflow-hidden animate-in slide-in-from-bottom-4 duration-500">
+                <div className="bg-card-bg rounded-2xl border border-border-subtle shadow-sm overflow-hidden animate-in slide-in-from-bottom-4 duration-500 transition-colors">
                     <div className="overflow-x-auto">
                         <table className="w-full text-left">
-                            <thead className="bg-neutral-light/50 border-b border-gray-100">
+                            <thead className="bg-soft/50 border-b border-border-subtle">
                                 <tr>
-                                    <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Request Date</th>
-                                    <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Amount</th>
-                                    <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
-                                    <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider text-right">Transaction Details</th>
+                                    <th className="px-6 py-4 text-xs font-bold text-text-muted uppercase tracking-wider">Request Date</th>
+                                    <th className="px-6 py-4 text-xs font-bold text-text-muted uppercase tracking-wider">Amount</th>
+                                    <th className="px-6 py-4 text-xs font-bold text-text-muted uppercase tracking-wider">Status</th>
+                                    <th className="px-6 py-4 text-xs font-bold text-text-muted uppercase tracking-wider text-right">Transaction Details</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-gray-100">
+                            <tbody className="divide-y divide-border-subtle">
                                 {history.length === 0 ? (
                                     <tr>
-                                        <td colSpan={4} className="px-6 py-12 text-center text-gray-500 font-medium">
+                                        <td colSpan={4} className="px-6 py-12 text-center text-text-muted font-medium">
                                             No withdrawal history found.
                                         </td>
                                     </tr>
                                 ) : (
                                     history.map((item) => (
-                                        <tr key={item._id} className="hover:bg-neutral-light/50 transition-colors group text-sm">
+                                        <tr key={item._id} className="hover:bg-soft/50 transition-colors group text-sm">
                                             <td className="px-6 py-4">
-                                                <div className="flex items-center gap-1.5 text-gray-900 font-bold">
-                                                    <Calendar className="w-4 h-4 text-gray-400" />
+                                                <div className="flex items-center gap-1.5 text-text-main font-bold">
+                                                    <Calendar className="w-4 h-4 text-text-muted/60" />
                                                     {new Date(item.createdAt).toLocaleDateString()}
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4">
-                                                <span className="font-black text-gray-900">Rs {item.amount.toLocaleString()}</span>
+                                                <span className="font-black text-text-main">Rs {item.amount.toLocaleString()}</span>
                                             </td>
                                             <td className="px-6 py-4">
                                                 {item.status === 'completed' || item.status === 'approved' ? (
-                                                    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-emerald-100 text-emerald-700 border border-emerald-200">
+                                                    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 dark:border-emerald-500/30">
                                                         <CheckCircle className="w-3 h-3" />
                                                         Success
                                                     </span>
                                                 ) : item.status === 'rejected' ? (
-                                                    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-red-100 text-red-700 border border-red-200">
+                                                    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20 dark:border-red-500/30">
                                                         <Clock className="w-3 h-3" />
                                                         Rejected
                                                     </span>
                                                 ) : (
-                                                    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-amber-100 text-amber-700 border border-amber-200">
+                                                    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 dark:border-amber-500/30">
                                                         <Clock className="w-3 h-3" />
                                                         Pending
                                                     </span>
@@ -267,9 +267,9 @@ export default function Withdrawal() {
                                             </td>
                                             <td className="px-6 py-4 text-right">
                                                 {item.txId ? (
-                                                    <code className="text-[10px] font-mono bg-gray-100 px-2 py-1 rounded text-gray-500">{item.txId}</code>
+                                                    <code className="text-[10px] font-mono bg-soft/50 px-2 py-1 rounded text-text-muted">{item.txId}</code>
                                                 ) : (
-                                                    <span className="text-xs text-gray-400 italic">Processing...</span>
+                                                    <span className="text-xs text-text-muted/60 italic">Processing...</span>
                                                 )}
                                             </td>
                                         </tr>

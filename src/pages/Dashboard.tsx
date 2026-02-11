@@ -56,7 +56,7 @@ export default function Dashboard() {
             <div className="flex items-center justify-center min-h-[60vh]">
                 <div className="text-center">
                     <Loader2 className="w-12 h-12 text-primary animate-spin mx-auto mb-4" />
-                    <p className="text-gray-500 font-medium">Loading dashboard...</p>
+                    <p className="text-text-muted font-medium">Loading dashboard...</p>
                 </div>
             </div>
         );
@@ -104,8 +104,8 @@ export default function Dashboard() {
             {/* Welcome Section */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 sm:gap-4">
                 <div>
-                    <h1 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">User Dashboard</h1>
-                    <p className="text-sm sm:text-base text-gray-500 font-medium">Welcome back, {stats.user.name}. Here's your overview.</p>
+                    <h1 className="text-2xl sm:text-3xl font-black text-text-main tracking-tight">User Dashboard</h1>
+                    <p className="text-sm sm:text-base text-text-muted font-medium">Welcome back, {stats.user.name}. Here's your overview.</p>
                 </div>
                 <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                     <span className="px-3 py-1 bg-emerald-100 text-emerald-700 text-[10px] sm:text-xs font-black rounded-full border border-emerald-200 uppercase tracking-wider">
@@ -120,15 +120,15 @@ export default function Dashboard() {
             {/* KPI Section */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {kpis.map((kpi) => (
-                    <div key={kpi.label} className="bg-white p-6 rounded-2xl border border-border-light shadow-sm hover:shadow-md transition-shadow group">
+                    <div key={kpi.label} className="bg-card-bg p-6 rounded-2xl border border-border-subtle shadow-sm hover:shadow-md transition-shadow group">
                         <div className="flex items-center justify-between mb-4">
-                            <div className={cn("p-3 rounded-xl", kpi.bg)}>
+                            <div className={cn("p-3 rounded-xl", kpi.bg, "dark:bg-opacity-10")}>
                                 <kpi.icon className={cn("w-6 h-6", kpi.color)} />
                             </div>
-                            <ArrowUpRight className="w-5 h-5 text-gray-300 group-hover:text-primary transition-colors" />
+                            <ArrowUpRight className="w-5 h-5 text-gray-300 dark:text-text-muted group-hover:text-primary transition-colors" />
                         </div>
-                        <p className="text-sm font-medium text-gray-500 mb-1">{kpi.label}</p>
-                        <h3 className="text-2xl font-bold text-gray-900 tracking-tight">{kpi.value}</h3>
+                        <p className="text-sm font-medium text-text-muted mb-1">{kpi.label}</p>
+                        <h3 className="text-2xl font-bold text-text-main tracking-tight">{kpi.value}</h3>
                     </div>
                 ))}
             </div>
@@ -137,19 +137,19 @@ export default function Dashboard() {
                 {/* Left Column - Team Stats & Referral */}
                 <div className="lg:col-span-1 space-y-8">
                     {/* Team Stats */}
-                    <div className="bg-white p-6 rounded-2xl border border-border-light shadow-sm">
-                        <h3 className="text-lg font-bold text-gray-900 mb-6 flex items-center gap-2">
+                    <div className="bg-card-bg p-6 rounded-2xl border border-border-subtle shadow-sm">
+                        <h3 className="text-lg font-bold text-text-main mb-6 flex items-center gap-2">
                             <Users className="w-5 h-5 text-primary" />
                             Team Overview
                         </h3>
                         <div className="space-y-4">
                             {teamStats.map((stat) => (
-                                <div key={stat.label} className="flex items-center justify-between p-4 bg-neutral-light rounded-xl border border-gray-100">
+                                <div key={stat.label} className="flex items-center justify-between p-4 bg-soft rounded-xl border border-border-subtle">
                                     <div className="flex items-center gap-3">
-                                        <stat.icon className="w-5 h-5 text-gray-400" />
-                                        <span className="text-sm font-medium text-gray-600">{stat.label}</span>
+                                        <stat.icon className="w-5 h-5 text-text-muted" />
+                                        <span className="text-sm font-medium text-text-muted">{stat.label}</span>
                                     </div>
-                                    <span className="text-lg font-bold text-gray-900">{stat.value}</span>
+                                    <span className="text-lg font-bold text-text-main">{stat.value}</span>
                                 </div>
                             ))}
                         </div>
@@ -161,16 +161,16 @@ export default function Dashboard() {
                             <UserPlus className="w-24 h-24 sm:w-32 sm:h-32" />
                         </div>
                         <h3 className="text-xl font-black mb-4 relative z-10 tracking-tight">Invite Friends</h3>
-                        <p className="text-sm text-neutral-light/70 mb-8 relative z-10 leading-relaxed font-medium">
+                        <p className="text-sm text-white/70 mb-8 relative z-10 leading-relaxed font-medium">
                             Share your referral link with your network and earn level income and bonuses.
                         </p>
                         <div className="relative z-10 bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 shadow-inner">
                             <div className="flex items-center justify-between mb-3">
-                                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-light/50">Your Referral ID</span>
+                                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">Your Referral ID</span>
                                 <span className="text-sm font-black text-accent-gold tracking-widest">{stats.user.referralId}</span>
                             </div>
                             <div className="flex items-center gap-3 bg-black/20 rounded-xl p-3 overflow-hidden border border-white/5">
-                                <p className="text-xs truncate flex-1 font-bold text-neutral-light/90">{referralLink}</p>
+                                <p className="text-xs truncate flex-1 font-bold text-white/90">{referralLink}</p>
                                 <button
                                     onClick={copyReferral}
                                     className="p-2 hover:bg-white/10 rounded-lg transition-all active:scale-90 bg-white/5"
@@ -185,29 +185,29 @@ export default function Dashboard() {
                 {/* Right Column - Level Progress & Investment Summary */}
                 <div className="lg:col-span-2 space-y-8">
                     {/* Investment & Profit Overview */}
-                    <div className="bg-white p-8 rounded-2xl border border-border-light shadow-sm relative overflow-hidden">
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-50 rounded-full translate-x-1/2 -translate-y-1/2 opacity-50" />
+                    <div className="bg-card-bg p-8 rounded-2xl border border-border-subtle shadow-sm relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-50 dark:bg-emerald-950/20 rounded-full translate-x-1/2 -translate-y-1/2 opacity-50" />
 
                         <div className="relative z-10">
                             <div className="flex items-center justify-between mb-8">
-                                <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                                <h3 className="text-lg font-bold text-text-main flex items-center gap-2">
                                     <TrendingUp className="w-5 h-5 text-primary" />
                                     Investment Overview
                                 </h3>
                                 {stats.investment.activeInvestments && stats.investment.activeInvestments.length > 1 && (
-                                    <div className="flex items-center gap-2 bg-gray-100 rounded-lg p-1">
+                                    <div className="flex items-center gap-2 bg-soft rounded-lg p-1 border border-border-subtle">
                                         <button
                                             onClick={() => setActiveInvIndex(prev => prev === 0 ? stats.investment.activeInvestments.length - 1 : prev - 1)}
-                                            className="p-1 hover:bg-white rounded shadow-sm transition-all"
+                                            className="p-1 hover:bg-white dark:hover:bg-white/10 rounded shadow-sm transition-all text-text-muted"
                                         >
                                             <ChevronRight className="w-4 h-4 rotate-180" />
                                         </button>
-                                        <span className="text-[10px] font-bold text-gray-500 w-12 text-center">
+                                        <span className="text-[10px] font-bold text-text-muted w-12 text-center">
                                             {activeInvIndex + 1} / {stats.investment.activeInvestments.length}
                                         </span>
                                         <button
                                             onClick={() => setActiveInvIndex(prev => prev === stats.investment.activeInvestments.length - 1 ? 0 : prev + 1)}
-                                            className="p-1 hover:bg-white rounded shadow-sm transition-all"
+                                            className="p-1 hover:bg-white dark:hover:bg-white/10 rounded shadow-sm transition-all text-text-muted"
                                         >
                                             <ChevronRight className="w-4 h-4" />
                                         </button>
@@ -217,7 +217,7 @@ export default function Dashboard() {
 
                             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                                 <div className="space-y-1">
-                                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Total Investment</p>
+                                    <p className="text-xs font-bold text-text-muted uppercase tracking-wider">Total Investment</p>
                                     <h4 className="text-3xl font-black text-primary tracking-tight">
                                         {formatCurrency(
                                             stats.investment.activeInvestments?.[activeInvIndex]?.amount ?? stats.investment.totalInvestment
@@ -225,7 +225,7 @@ export default function Dashboard() {
                                     </h4>
                                 </div>
                                 <div className="space-y-1">
-                                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Total Profit</p>
+                                    <p className="text-xs font-bold text-text-muted uppercase tracking-wider">Total Profit</p>
                                     <h4 className="text-3xl font-black text-accent-gold tracking-tight">
                                         {formatCurrency(
                                             stats.investment.activeInvestments?.[activeInvIndex]?.totalProfit ?? stats.investment.totalProfit
@@ -233,15 +233,15 @@ export default function Dashboard() {
                                     </h4>
                                 </div>
                                 <div className="space-y-1">
-                                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Monthly Profit</p>
-                                    <h4 className="text-3xl font-black text-gray-900 tracking-tight">
+                                    <p className="text-xs font-bold text-text-muted uppercase tracking-wider">Monthly Profit</p>
+                                    <h4 className="text-3xl font-black text-text-main tracking-tight">
                                         {formatCurrency(
                                             stats.investment.activeInvestments?.[activeInvIndex]?.monthlyProfit ?? stats.investment.monthlyProfit
                                         )}
                                     </h4>
                                 </div>
                                 <div className="space-y-1">
-                                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2">
+                                    <p className="text-xs font-bold text-text-muted uppercase tracking-wider flex items-center gap-2">
                                         Current Plan
                                         {stats.investment.activeInvestments && stats.investment.activeInvestments.length > 0 && (
                                             <span className="px-1.5 py-0.5 bg-blue-50 text-blue-600 text-[8px] rounded border border-blue-100 uppercase">
@@ -251,25 +251,25 @@ export default function Dashboard() {
                                     </p>
                                     <h4 className="text-3xl font-black text-blue-600 tracking-tight">
                                         {((stats.investment.activeInvestments?.[activeInvIndex]?.profitRate ?? stats.investment.profitRate ?? 0) * 100).toFixed(1)}%
-                                        <span className="text-xs font-bold text-gray-400 ml-1">
+                                        <span className="text-xs font-bold text-text-muted ml-1">
                                             Phase {stats.investment.activeInvestments?.[activeInvIndex]?.currentPhase ?? stats.investment.currentPhase ?? 1}
                                         </span>
                                     </h4>
                                     {stats.investment.activeInvestments && stats.investment.activeInvestments[activeInvIndex] && (
-                                        <p className="text-[10px] text-gray-400 font-bold mt-1">
+                                        <p className="text-[10px] text-text-muted font-bold mt-1">
                                             Amt: {formatCurrency(stats.investment.activeInvestments[activeInvIndex].amount)}
                                         </p>
                                     )}
                                 </div>
                             </div>
 
-                            <div className="mt-8 pt-8 border-t border-gray-100 flex flex-wrap gap-6">
+                            <div className="mt-8 pt-8 border-t border-border-subtle flex flex-wrap gap-6">
                                 <div className="flex items-center gap-2">
                                     <div className={cn(
                                         "w-2 h-2 rounded-full",
                                         stats.investment.roiStatus === 'Growing' ? 'bg-emerald-500 animate-pulse' : 'bg-gray-400'
                                     )} />
-                                    <span className="text-sm font-bold text-gray-700">ROI Status: {stats.investment.roiStatus}</span>
+                                    <span className="text-sm font-bold text-text-main/80">ROI Status: {stats.investment.roiStatus}</span>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <ExternalLink className="w-4 h-4 text-primary" />
@@ -280,9 +280,9 @@ export default function Dashboard() {
                     </div>
 
                     {/* Levels & Achievements */}
-                    <div className="bg-white rounded-2xl border border-border-light shadow-sm overflow-hidden">
-                        <div className="p-6 border-b border-gray-100 flex items-center justify-between">
-                            <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                    <div className="bg-card-bg rounded-2xl border border-border-subtle shadow-sm overflow-hidden">
+                        <div className="p-6 border-b border-border-subtle flex items-center justify-between transition-colors">
+                            <h3 className="text-lg font-bold text-text-main flex items-center gap-2">
                                 <Trophy className="w-5 h-5 text-accent-gold" />
                                 Levels & Achievements
                             </h3>
@@ -293,16 +293,16 @@ export default function Dashboard() {
                         <div className="overflow-x-auto">
                             <table className="w-full text-left">
                                 <thead>
-                                    <tr className="bg-neutral-light/50">
-                                        <th className="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Lvl</th>
-                                        <th className="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Rank</th>
-                                        <th className="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Target (Cash/Prod)</th>
-                                        <th className="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Reward</th>
-                                        <th className="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Progress</th>
-                                        <th className="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] text-right">Status</th>
+                                    <tr className="bg-soft/50 border-b border-border-subtle transition-colors">
+                                        <th className="px-6 py-4 text-[10px] font-black text-text-muted uppercase tracking-[0.2em]">Lvl</th>
+                                        <th className="px-6 py-4 text-[10px] font-black text-text-muted uppercase tracking-[0.2em]">Rank</th>
+                                        <th className="px-6 py-4 text-[10px] font-black text-text-muted uppercase tracking-[0.2em]">Target (Cash/Prod)</th>
+                                        <th className="px-6 py-4 text-[10px] font-black text-text-muted uppercase tracking-[0.2em]">Reward</th>
+                                        <th className="px-6 py-4 text-[10px] font-black text-text-muted uppercase tracking-[0.2em]">Progress</th>
+                                        <th className="px-6 py-4 text-[10px] font-black text-text-muted uppercase tracking-[0.2em] text-right">Status</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-gray-100">
+                                <tbody className="divide-y divide-border-subtle">
                                     {stats.levels.map((level, index) => {
                                         const isAchieved = level.status === 'achieved';
                                         const isCurrent = isAchieved && (index === stats.levels.length - 1 || stats.levels[index + 1].status !== 'achieved');
@@ -310,21 +310,21 @@ export default function Dashboard() {
 
                                         return (
                                             <tr key={level.no} className={cn(
-                                                "hover:bg-neutral-light transition-colors group",
-                                                isCurrent && "bg-emerald-50/50",
-                                                isNext && "bg-primary/[0.02]"
+                                                "hover:bg-soft transition-colors group",
+                                                isCurrent && "bg-emerald-500/10 dark:bg-emerald-500/20",
+                                                isNext && "bg-primary/5"
                                             )}>
                                                 <td className="px-6 py-4">
                                                     <span className={cn(
                                                         "text-sm font-bold transition-colors",
-                                                        isAchieved ? "text-emerald-600" : "text-gray-400 group-hover:text-primary"
+                                                        isAchieved ? "text-emerald-600" : "text-text-muted group-hover:text-primary"
                                                     )}>{level.no}</span>
                                                 </td>
                                                 <td className="px-6 py-4">
                                                     <div className="flex items-center gap-2">
-                                                        <span className="text-sm font-bold text-gray-900">{level.name}</span>
+                                                        <span className="text-sm font-bold text-text-main">{level.name}</span>
                                                         {isCurrent && (
-                                                            <span className="px-1.5 py-0.5 bg-emerald-100 text-emerald-700 text-[8px] font-black rounded uppercase tracking-widest border border-emerald-200 shadow-sm animate-in fade-in zoom-in duration-500">
+                                                            <span className="px-1.5 py-0.5 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 text-[8px] font-black rounded uppercase tracking-widest border border-emerald-200 dark:border-emerald-800/50 shadow-sm animate-in fade-in zoom-in duration-500">
                                                                 Current
                                                             </span>
                                                         )}
@@ -337,28 +337,28 @@ export default function Dashboard() {
                                                 </td>
                                                 <td className="px-6 py-4">
                                                     <div className="flex items-center gap-2">
-                                                        <Target className="w-3.5 h-3.5 text-gray-400" />
-                                                        <span className="text-[11px] text-gray-600 font-bold">{level.criteria}</span>
+                                                        <Target className="w-3.5 h-3.5 text-text-muted/60" />
+                                                        <span className="text-[11px] text-text-muted font-bold">{level.criteria}</span>
                                                     </div>
                                                 </td>
                                                 <td className="px-6 py-4">
-                                                    <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-black bg-accent-gold/10 text-accent-gold border border-accent-gold/20 italic">
+                                                    <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-black bg-accent-gold/10 dark:bg-accent-gold/5 text-accent-gold border border-accent-gold/20 dark:border-accent-gold/10 italic">
                                                         {level.reward}
                                                     </span>
                                                 </td>
                                                 <td className="px-6 py-4">
-                                                    <div className="w-full max-w-[100px] h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                                                    <div className="w-full max-w-[100px] h-1.5 bg-soft rounded-full overflow-hidden">
                                                         <div
                                                             className="h-full bg-primary transition-all duration-1000"
                                                             style={{ width: `${level.progress}%` }}
                                                         />
                                                     </div>
-                                                    <span className="text-[9px] font-black text-gray-400 uppercase mt-1 block">{Math.round(level.progress)}% Complete</span>
+                                                    <span className="text-[9px] font-black text-text-muted uppercase mt-1 block">{Math.round(level.progress)}% Complete</span>
                                                 </td>
                                                 <td className="px-6 py-4 text-right">
                                                     {level.status === 'achieved' ? (
                                                         <div className="flex flex-col items-end gap-1">
-                                                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-emerald-100 text-emerald-700 border border-emerald-200">
+                                                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">
                                                                 Achieved
                                                             </span>
                                                             {level.claimStatus === 'not_claimed' && (
@@ -377,7 +377,7 @@ export default function Dashboard() {
                                                             )}
                                                         </div>
                                                     ) : (
-                                                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-gray-100 text-gray-500 border border-gray-200 opacity-60">
+                                                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-soft text-text-muted border border-border-subtle opacity-60">
                                                             Locked
                                                         </span>
                                                     )}

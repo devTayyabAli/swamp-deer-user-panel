@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Mail, Lock, LogIn, ChevronRight } from 'lucide-react';
+import { Mail, Lock, LogIn, ChevronRight, Eye, EyeOff } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
@@ -11,6 +11,7 @@ export default function Login() {
     const navigate = useNavigate();
     const dispatch = useDispatch<AppDispatch>();
     const { user, loading, error } = useSelector((state: RootState) => state.auth);
+    const [showPassword, setShowPassword] = useState(false);
 
     const {
         register,
@@ -47,8 +48,8 @@ export default function Login() {
                 </div>
 
                 <div className="relative z-10 text-center space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
-                    <div className="w-32 h-32 mx-auto bg-white/5 backdrop-blur-md rounded-3xl flex items-center justify-center border border-white/10 shadow-2xl">
-                        <span className="text-4xl font-black text-accent-gold tracking-tighter italic">SD</span>
+                    <div className="w-32 h-32 mx-auto bg-card-bg/5 backdrop-blur-md rounded-3xl flex items-center justify-center border border-white/10 shadow-2xl p-6">
+                        <img src="/favicon.png" alt="Swamp Deer Logo" className="w-full h-full object-contain" />
                     </div>
                     <div className="space-y-4">
                         <h1 className="text-5xl font-extrabold text-white tracking-tight">
@@ -66,18 +67,18 @@ export default function Login() {
                 <div className="w-full max-w-md space-y-8 animate-in fade-in slide-in-from-right-8 duration-700">
                     <div className="text-center lg:text-left space-y-2">
                         <div className="flex lg:hidden justify-center mb-6">
-                            <span className="text-3xl font-black text-primary tracking-tighter italic">SWAMP DEER</span>
+                            <img src="/favicon.png" alt="Swamp Deer Logo" className="h-12 w-auto" />
                         </div>
-                        <h2 className="text-3xl font-bold text-gray-900 tracking-tight">Welcome Back</h2>
-                        <p className="text-gray-500">Enter your credentials to access your portal</p>
+                        <h2 className="text-3xl font-bold text-text-main tracking-tight">Welcome Back</h2>
+                        <p className="text-text-muted">Enter your credentials to access your portal</p>
                     </div>
 
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 mt-8">
                         <div className="space-y-4">
                             <div className="group space-y-1">
-                                <label className="text-sm font-semibold text-gray-700 ml-1">Email Address</label>
+                                <label className="text-sm font-semibold text-text-main ml-1">Email Address</label>
                                 <div className="relative">
-                                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-primary transition-colors" />
+                                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted group-focus-within:text-primary transition-colors" />
                                     <input
                                         {...register('email', {
                                             required: 'Email is required',
@@ -87,7 +88,7 @@ export default function Login() {
                                             },
                                         })}
                                         type="email"
-                                        className={`w-full pl-11 pr-4 py-3 bg-white border rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none ${errors.email ? "border-red-500" : "border-gray-200"}`}
+                                        className={`w-full pl-11 pr-4 py-3 bg-soft border rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none text-text-main ${errors.email ? "border-red-500" : "border-border-subtle"}`}
                                         placeholder="name@example.com"
                                     />
                                 </div>
@@ -98,13 +99,13 @@ export default function Login() {
 
                             <div className="group space-y-1">
                                 <div className="flex justify-between items-center ml-1">
-                                    <label className="text-sm font-semibold text-gray-700">Password</label>
+                                    <label className="text-sm font-semibold text-text-main">Password</label>
                                     <Link to="/forgot-password" title="Recover account" className="text-xs font-semibold text-primary hover:text-deep-green transition-colors">
                                         Forgot password?
                                     </Link>
                                 </div>
                                 <div className="relative">
-                                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-primary transition-colors" />
+                                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted group-focus-within:text-primary transition-colors" />
                                     <input
                                         {...register('password', {
                                             required: 'Password is required',
@@ -113,12 +114,19 @@ export default function Login() {
                                                 message: 'Password must be at least 6 characters',
                                             },
                                         })}
-                                        type="password"
+                                        type={showPassword ? 'text' : 'password'}
                                         className={
-                                            `w-full pl-11 pr-4 py-3 bg-white border rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none ${errors.password ? "border-red-500" : "border-gray-200"}`}
+                                            `w-full pl-11 pr-12 py-3 bg-soft border rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none text-text-main ${errors.password ? "border-red-500" : "border-border-subtle"}`}
 
                                         placeholder="••••••••"
                                     />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-primary transition-colors focus:outline-none"
+                                    >
+                                        {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                    </button>
                                 </div>
                                 {errors.password && (
                                     <p className="text-xs text-red-500 ml-1 mt-1">{errors.password.message}</p>
@@ -143,7 +151,7 @@ export default function Login() {
                         </button>
                     </form>
 
-                    <p className="text-center text-gray-500 font-medium">
+                    <p className="text-center text-text-muted font-medium">
                         New here?{' '}
                         <Link to="/signup" className="text-primary hover:text-deep-green font-bold transition-colors">
                             Create an account

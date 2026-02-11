@@ -8,16 +8,18 @@ import {
     Wallet,
     TrendingUp,
     Users,
-    History,
     UserCircle,
     LogOut,
     Menu,
     X,
-    Search,
-    Gift
+    Gift,
+    ArrowDownToLine,
+    Sun,
+    Moon
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { cn } from '../lib/utils';
+import { useTheme } from '../context/ThemeContext';
 
 const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
@@ -25,7 +27,7 @@ const navigation = [
     { name: 'Investment', href: '/investment', icon: TrendingUp },
     { name: 'Income', href: '/income', icon: Wallet },
     { name: 'Rewards', href: '/rewards', icon: Gift },
-    { name: 'Withdrawal', href: '/withdrawal', icon: History },
+    { name: 'Withdrawal', href: '/withdrawal', icon: ArrowDownToLine },
     { name: 'Profile', href: '/profile', icon: UserCircle },
 ];
 
@@ -35,6 +37,7 @@ export default function UserLayout() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { user } = useSelector((state: RootState) => state.auth);
+    const { theme, toggleTheme } = useTheme();
 
     useEffect(() => {
         if (!user) {
@@ -51,7 +54,7 @@ export default function UserLayout() {
     if (!user) return null;
 
     return (
-        <div className="min-h-screen bg-neutral-light">
+        <div className="min-h-screen bg-page-bg transition-colors duration-300">
             {/* Mobile/Tablet Sidebar Drawer */}
             <div
                 className={cn(
@@ -68,12 +71,13 @@ export default function UserLayout() {
                 {/* Drawer Content */}
                 <div
                     className={cn(
-                        "fixed inset-y-0 left-0 flex w-[280px] flex-col bg-white shadow-2xl transition-transform duration-300 ease-in-out transform",
+                        "fixed inset-y-0 left-0 flex w-[280px] flex-col bg-card-bg shadow-2xl transition-transform duration-300 ease-in-out transform border-r border-border-subtle",
                         sidebarOpen ? "translate-x-0" : "-translate-x-full"
                     )}
                 >
-                    <div className="flex items-center justify-between px-6 h-20 border-b border-border-light bg-swamp-deer text-white">
-                        <span className="text-xl font-black tracking-tighter">SWAMP DEER</span>
+                    <div className="flex items-center gap-3 px-6 h-20 border-b border-border-subtle bg-swamp-deer">
+                        <img src="/favicon.png" alt="Swamp Deer Logo" className="h-8 w-auto" />
+                        <span className="text-xl font-black tracking-tighter text-white">SWAMP DEER</span>
                     </div>
 
                     <div className="flex-1 overflow-y-auto pt-6 px-4 pb-20">
@@ -89,10 +93,10 @@ export default function UserLayout() {
                                             "flex items-center gap-4 px-4 py-3 rounded-xl text-sm font-bold transition-all",
                                             isActive
                                                 ? "bg-primary text-white shadow-lg shadow-primary/20"
-                                                : "text-gray-600 hover:bg-neutral-light hover:text-primary"
+                                                : "text-text-muted hover:bg-soft hover:text-primary dark:hover:text-primary"
                                         )}
                                     >
-                                        <item.icon className={cn("w-5 h-5", isActive ? "text-white" : "text-gray-400")} />
+                                        <item.icon className={cn("w-5 h-5", isActive ? "text-white" : "text-text-muted")} />
                                         {item.name}
                                     </Link>
                                 );
@@ -101,10 +105,10 @@ export default function UserLayout() {
                     </div>
 
                     {/* Mobile Drawer Footer */}
-                    <div className="p-4 border-t border-border-light bg-neutral-light/30">
+                    <div className="p-4 border-t border-border-subtle bg-page-bg/50">
                         <button
                             onClick={handleLogout}
-                            className="flex items-center w-full gap-4 px-4 py-3 text-sm font-bold text-red-600 transition-all rounded-xl hover:bg-red-50 active:scale-[0.98]"
+                            className="flex items-center w-full gap-4 px-4 py-3 text-sm font-bold text-red-600 transition-all rounded-xl hover:bg-red-500/10 active:scale-[0.98]"
                         >
                             <LogOut className="w-5 h-5" />
                             Sign Out
@@ -115,27 +119,23 @@ export default function UserLayout() {
 
             {/* Static sidebar for desktop */}
             <div className={cn(
-                "hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:flex-col transition-all duration-300 ease-in-out border-r border-border-light bg-white shadow-xl shadow-gray-200/20",
+                "hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:flex-col transition-all duration-300 ease-in-out border-r border-border-subtle bg-card-bg shadow-xl shadow-gray-200/20 dark:shadow-none",
                 sidebarOpen ? "w-72" : "w-20"
             )}>
                 <div className="flex flex-col flex-1 min-h-0">
                     <div className={cn(
-                        "flex items-center h-20 px-6 border-b border-border-light transition-all duration-300 overflow-hidden",
-                        sidebarOpen ? "bg-swamp-deer text-white justify-between" : "bg-white text-primary justify-center px-0"
+                        "flex items-center h-20 px-6 border-b border-border-subtle transition-all duration-300 overflow-hidden",
+                        sidebarOpen ? "bg-swamp-deer text-white justify-between" : "bg-card-bg text-primary justify-center px-0"
                     )}>
                         <div className={cn(
                             "flex items-center gap-3 transition-opacity duration-300",
                             !sidebarOpen && "hidden"
                         )}>
-                            <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
-                                <Search className="w-4 h-4 text-white" />
-                            </div>
+                            <img src="/favicon.png" alt="Swamp Deer Logo" className="h-8 w-auto" />
                             <span className="text-xl font-black tracking-tighter whitespace-nowrap">SWAMP DEER</span>
                         </div>
                         {!sidebarOpen && (
-                            <div className="w-10 h-10 rounded-xl bg-primary/5 border border-primary/10 flex items-center justify-center text-primary font-black shadow-sm">
-                                SD
-                            </div>
+                            <img src="/favicon.png" alt="Swamp Deer Logo" className="w-10 h-10 object-contain" />
                         )}
                     </div>
 
@@ -152,7 +152,7 @@ export default function UserLayout() {
                                             sidebarOpen ? "px-4 py-3 gap-4" : "justify-center aspect-square",
                                             isActive
                                                 ? "bg-primary text-white shadow-lg shadow-primary/25"
-                                                : "text-gray-500 hover:bg-neutral-light hover:text-primary"
+                                                : "text-text-muted hover:bg-soft hover:text-primary dark:hover:text-primary"
                                         )}
                                     >
                                         <item.icon className={cn(
@@ -176,11 +176,11 @@ export default function UserLayout() {
                         </nav>
                     </div>
 
-                    <div className="p-3 border-t border-border-light bg-neutral-light/10">
+                    <div className="p-3 border-t border-border-subtle bg-page-bg/20">
                         <button
                             onClick={handleLogout}
                             className={cn(
-                                "flex items-center w-full transition-all rounded-xl font-bold text-red-600 hover:bg-red-50",
+                                "flex items-center w-full transition-all rounded-xl font-bold text-red-600 hover:bg-red-500/10",
                                 sidebarOpen ? "px-4 py-3 gap-4 text-sm" : "justify-center aspect-square"
                             )}
                         >
@@ -201,11 +201,11 @@ export default function UserLayout() {
                 "flex flex-col min-h-screen transition-all duration-300 ease-in-out",
                 sidebarOpen ? "lg:pl-72" : "lg:pl-20"
             )}>
-                <header className="sticky top-0 z-40 flex items-center justify-between h-20 px-4 bg-white/80 backdrop-blur-md border-b border-border-light lg:px-8">
+                <header className="sticky top-0 z-40 flex items-center justify-between h-20 px-4 bg-card-bg/80 backdrop-blur-md border-b border-border-subtle lg:px-8">
                     <div className="flex items-center gap-4">
                         <button
                             type="button"
-                            className="p-2 -ml-2 text-gray-400 hover:text-primary hover:bg-primary/5 rounded-xl transition-all flex items-center gap-2 group border border-transparent hover:border-primary/10"
+                            className="p-2 -ml-2 text-text-muted/60 hover:text-primary hover:bg-soft rounded-xl transition-all flex items-center gap-2 group border border-transparent hover:border-primary/10"
                             onClick={() => setSidebarOpen(!sidebarOpen)}
                         >
                             <div className="relative">
@@ -225,19 +225,38 @@ export default function UserLayout() {
                                 Mini
                             </span>
                         </button>
-                        <h2 className="hidden sm:block text-lg font-bold text-gray-900 capitalize tracking-tight">
+                        <h2 className="hidden sm:block text-lg font-bold text-text-main capitalize tracking-tight">
                             {location.pathname.split('/')[1] || 'Dashboard'}
                         </h2>
                     </div>
 
                     <div className="flex items-center gap-4">
+                        <button
+                            onClick={toggleTheme}
+                            className="p-2.5 text-text-muted hover:text-primary hover:bg-soft rounded-xl transition-all border border-transparent hover:border-primary/10 active:scale-95"
+                            title={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
+                        >
+                            {theme === 'light' ? (
+                                <Moon className="w-5 h-5" />
+                            ) : (
+                                <Sun className="w-5 h-5 text-accent-gold" />
+                            )}
+                        </button>
+
                         <div className="hidden xs:flex flex-col items-end">
-                            <span className="text-sm font-bold text-gray-900 leading-none mb-1">{user?.name}</span>
-                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest bg-gray-100 px-1.5 py-0.5 rounded">ID: {user?.userName}</span>
+                            <span className="text-sm font-bold text-text-main leading-none mb-1">{user?.name}</span>
+                            <span className="text-[10px] font-black text-text-muted uppercase tracking-widest bg-page-bg px-1.5 py-0.5 rounded border border-border-subtle">ID: {user?.userName}</span>
                         </div>
-                        <div className="flex items-center justify-center w-10 h-10 border-2 rounded-xl border-accent-gold/20 bg-accent-gold/5 shadow-inner">
-                            <UserCircle className="w-6 h-6 text-accent-gold" />
-                        </div>
+                        <Link
+                            to="/profile"
+                            className="flex items-center justify-center w-10 h-10 border-2 rounded-xl border-accent-gold/20 bg-accent-gold/5 shadow-inner overflow-hidden hover:border-accent-gold/40 transition-all active:scale-95"
+                        >
+                            {user?.profilePic ? (
+                                <img src={user.profilePic} alt={user.name} className="w-full h-full object-cover" />
+                            ) : (
+                                <UserCircle className="w-6 h-6 text-accent-gold" />
+                            )}
+                        </Link>
                     </div>
                 </header>
 
