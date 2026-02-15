@@ -11,7 +11,6 @@ import {
     Target,
     Trophy,
     Copy,
-    ExternalLink,
     Loader2
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
