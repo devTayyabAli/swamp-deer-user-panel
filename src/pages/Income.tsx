@@ -76,7 +76,7 @@ export default function Income() {
                             activeSubTab === 'levels' ? "bg-primary text-white" : "text-text-muted hover:text-primary dark:hover:text-primary"
                         )}
                     >
-                        Level Income
+                        Income History
                     </button>
                 </div>
             </div>

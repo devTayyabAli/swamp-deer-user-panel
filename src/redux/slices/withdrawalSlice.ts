@@ -50,9 +50,9 @@ export const fetchWithdrawalHistory = createAsyncThunk(
 
 export const submitWithdrawalRequest = createAsyncThunk(
     'withdrawal/submitRequest',
-    async (amount: number, { rejectWithValue, dispatch }) => {
+    async (data: { amount: number; method: string; bankDetails?: any }, { rejectWithValue, dispatch }) => {
         try {
-            const response = await api.post('/withdrawals', { amount });
+            const response = await api.post('/withdrawals', data);
             // Refresh balance after successful request
             dispatch(fetchBalance());
             dispatch(fetchWithdrawalHistory());

@@ -15,6 +15,13 @@ interface User {
     currentLevel?: number;
     createdAt?: string;
     profilePic?: string;
+    bankDetails?: {
+        accountNumber: string;
+        bankName: string;
+        ifscCode: string;
+        accountHolderName: string;
+        branchName: string;
+    };
     token: string;
 }
 

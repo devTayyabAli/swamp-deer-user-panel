@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Wallet, ArrowDownCircle, Calendar, CheckCircle, Clock, Landmark, Banknote } from 'lucide-react';
+import { Wallet, ArrowDownCircle, Calendar, CheckCircle, Clock, Landmark, Banknote, AlertCircle, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { cn } from '../lib/utils';
@@ -13,6 +14,19 @@ export default function Withdrawal() {
     const [activeTab, setActiveTab] = useState<'request' | 'history'>('request');
     const [amount, setAmount] = useState('');
     const [method, setMethod] = useState<'USDT' | 'BANK'>('USDT');
+
+    const { user } = useSelector((state: RootState) => state.auth);
+
+    const hasBankDetails = !!(user?.bankDetails?.accountNumber && user?.bankDetails?.bankName && user?.bankDetails?.accountHolderName);
+
+    // Bank Details (Read-only snapshot from user)
+    const bankDetails = {
+        accountNumber: user?.bankDetails?.accountNumber || '',
+        bankName: user?.bankDetails?.bankName || '',
+        ifscCode: user?.bankDetails?.ifscCode || '',
+        accountHolderName: user?.bankDetails?.accountHolderName || '',
+        branchName: user?.bankDetails?.branchName || ''
+    };
 
     useEffect(() => {
         dispatch(fetchBalance());
@@ -36,7 +50,20 @@ export default function Withdrawal() {
 
         const toastId = toast.loading('Processing withdrawal request...');
         try {
-            await dispatch(submitWithdrawalRequest(withdrawAmount)).unwrap();
+            const withdrawData: any = {
+                amount: withdrawAmount,
+                method: method === 'USDT' ? 'CASH' : 'BANK'
+            };
+
+            if (method === 'BANK') {
+                if (!bankDetails.accountNumber || !bankDetails.bankName || !bankDetails.accountHolderName) {
+                    toast.error('Please fill in required bank details', { id: toastId });
+                    return;
+                }
+                withdrawData.bankDetails = bankDetails;
+            }
+
+            await dispatch(submitWithdrawalRequest(withdrawData)).unwrap();
             toast.success('Withdrawal request submitted successfully!', { id: toastId });
             setAmount('');
             setActiveTab('history');
@@ -173,11 +200,69 @@ export default function Withdrawal() {
                                             )}
                                         </div>
                                     </div>
+
+                                    {method === 'BANK' && (
+                                        <div className="mt-6 animate-in slide-in-from-top-2 duration-300">
+                                            {hasBankDetails ? (
+                                                <div className="p-6 bg-soft/50 rounded-2xl border border-border-subtle space-y-4">
+                                                    <h4 className="text-sm font-bold text-text-main flex items-center gap-2 mb-2">
+                                                        <Landmark className="w-4 h-4 text-primary" />
+                                                        Bank Account Details
+                                                    </h4>
+                                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                        <div className="space-y-1">
+                                                            <p className="text-[10px] font-black uppercase tracking-widest text-text-muted/60">Account Holder</p>
+                                                            <p className="text-sm font-bold text-text-main">{bankDetails.accountHolderName}</p>
+                                                        </div>
+                                                        <div className="space-y-1">
+                                                            <p className="text-[10px] font-black uppercase tracking-widest text-text-muted/60">Bank Name</p>
+                                                            <p className="text-sm font-bold text-text-main">{bankDetails.bankName}</p>
+                                                        </div>
+                                                        <div className="space-y-1">
+                                                            <p className="text-[10px] font-black uppercase tracking-widest text-text-muted/60">Account / IBAN</p>
+                                                            <p className="text-sm font-bold text-text-main">{bankDetails.accountNumber}</p>
+                                                        </div>
+                                                        {bankDetails.ifscCode && (
+                                                            <div className="space-y-1">
+                                                                <p className="text-[10px] font-black uppercase tracking-widest text-text-muted/60">IFSC / SWIFT</p>
+                                                                <p className="text-sm font-bold text-text-main">{bankDetails.ifscCode}</p>
+                                                            </div>
+                                                        )}
+                                                        {bankDetails.branchName && (
+                                                            <div className="space-y-1 sm:col-span-2">
+                                                                <p className="text-[10px] font-black uppercase tracking-widest text-text-muted/60">Branch / City</p>
+                                                                <p className="text-sm font-bold text-text-main">{bankDetails.branchName}</p>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <div className="p-6 bg-amber-500/5 rounded-2xl border border-amber-500/10 space-y-4 flex flex-col items-center text-center">
+                                                    <div className="w-12 h-12 bg-amber-500/10 rounded-full flex items-center justify-center text-amber-600 dark:text-amber-400 mb-2">
+                                                        <AlertCircle className="w-6 h-6" />
+                                                    </div>
+                                                    <div>
+                                                        <h4 className="font-bold text-amber-700 dark:text-amber-400 mb-1">Bank Details Missing</h4>
+                                                        <p className="text-xs text-amber-600/80 dark:text-amber-400/60 font-medium">
+                                                            Please set up your bank account details in your profile to proceed with bank transfers.
+                                                        </p>
+                                                    </div>
+                                                    <Link
+                                                        to="/profile"
+                                                        className="inline-flex items-center gap-2 px-6 py-2.5 bg-amber-500 text-white font-bold rounded-xl hover:bg-amber-600 transition-all text-sm group"
+                                                    >
+                                                        Set Up Bank Details
+                                                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                                                    </Link>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
                                 </div>
 
                                 <button
                                     type="submit"
-                                    disabled={loading || !amount}
+                                    disabled={loading || !amount || (method === 'BANK' && !hasBankDetails)}
                                     className="w-full py-4 bg-primary text-white font-black rounded-xl hover:bg-deep-green shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     {loading ? (

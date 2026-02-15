@@ -1,5 +1,5 @@
 import React from 'react';
-import { User, Mail, Shield, Calendar, MapPin, Phone, Edit, Save, Camera, Link2, Copy, Lock, X } from 'lucide-react';
+import { User, Mail, Shield, Calendar, MapPin, Phone, Edit, Save, Camera, Link2, Copy, Lock, X, Landmark } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
@@ -25,6 +25,13 @@ export default function Profile() {
             name: user?.name || '',
             phone: user?.phone || '',
             address: user?.address || '',
+            bankDetails: {
+                accountHolderName: user?.bankDetails?.accountHolderName || '',
+                bankName: user?.bankDetails?.bankName || '',
+                accountNumber: user?.bankDetails?.accountNumber || '',
+                ifscCode: user?.bankDetails?.ifscCode || '',
+                branchName: user?.bankDetails?.branchName || '',
+            }
         },
     });
 
@@ -253,6 +260,75 @@ export default function Profile() {
                                         disabled={!editing}
                                         type="text"
                                         placeholder="Enter your location"
+                                        className="w-full pl-10 pr-4 py-3 bg-soft border border-border-subtle rounded-xl focus:ring-2 focus:ring-primary/20 outline-none font-bold text-sm disabled:opacity-70 transition-all text-text-main"
+                                    />
+                                </div>
+                            </div>
+                        </form>
+
+                        <h3 className="text-lg font-bold text-text-main mt-12 mb-8 border-b border-border-subtle pb-4">Bank Account Details</h3>
+                        <form className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div className="space-y-2">
+                                <label className="text-xs font-bold text-text-muted/60 uppercase tracking-widest">Account Holder Name</label>
+                                <div className="relative">
+                                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
+                                    <input
+                                        {...profileRegister('bankDetails.accountHolderName')}
+                                        disabled={!editing}
+                                        type="text"
+                                        placeholder="Full name as per bank"
+                                        className="w-full pl-10 pr-4 py-3 bg-soft border border-border-subtle rounded-xl focus:ring-2 focus:ring-primary/20 outline-none font-bold text-sm disabled:opacity-70 transition-all text-text-main"
+                                    />
+                                </div>
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-xs font-bold text-text-muted/60 uppercase tracking-widest">Bank Name</label>
+                                <div className="relative">
+                                    <Landmark className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
+                                    <input
+                                        {...profileRegister('bankDetails.bankName')}
+                                        disabled={!editing}
+                                        type="text"
+                                        placeholder="e.g. HBL, UBL, Meezan"
+                                        className="w-full pl-10 pr-4 py-3 bg-soft border border-border-subtle rounded-xl focus:ring-2 focus:ring-primary/20 outline-none font-bold text-sm disabled:opacity-70 transition-all text-text-main"
+                                    />
+                                </div>
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-xs font-bold text-text-muted/60 uppercase tracking-widest">Account Number / IBAN</label>
+                                <div className="relative">
+                                    <Shield className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
+                                    <input
+                                        {...profileRegister('bankDetails.accountNumber')}
+                                        disabled={!editing}
+                                        type="text"
+                                        placeholder="Enter account number or IBAN"
+                                        className="w-full pl-10 pr-4 py-3 bg-soft border border-border-subtle rounded-xl focus:ring-2 focus:ring-primary/20 outline-none font-bold text-sm disabled:opacity-70 transition-all text-text-main"
+                                    />
+                                </div>
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-xs font-bold text-text-muted/60 uppercase tracking-widest">IFSC / Swift Code</label>
+                                <div className="relative">
+                                    <Shield className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
+                                    <input
+                                        {...profileRegister('bankDetails.ifscCode')}
+                                        disabled={!editing}
+                                        type="text"
+                                        placeholder="e.g. MZNBPKKA"
+                                        className="w-full pl-10 pr-4 py-3 bg-soft border border-border-subtle rounded-xl focus:ring-2 focus:ring-primary/20 outline-none font-bold text-sm disabled:opacity-70 transition-all text-text-main"
+                                    />
+                                </div>
+                            </div>
+                            <div className="space-y-2 sm:col-span-2">
+                                <label className="text-xs font-bold text-text-muted/60 uppercase tracking-widest">Branch Name / City</label>
+                                <div className="relative">
+                                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
+                                    <input
+                                        {...profileRegister('bankDetails.branchName')}
+                                        disabled={!editing}
+                                        type="text"
+                                        placeholder="e.g. Main Branch, Lahore"
                                         className="w-full pl-10 pr-4 py-3 bg-soft border border-border-subtle rounded-xl focus:ring-2 focus:ring-primary/20 outline-none font-bold text-sm disabled:opacity-70 transition-all text-text-main"
                                     />
                                 </div>

@@ -271,10 +271,7 @@ export default function Dashboard() {
                                     )} />
                                     <span className="text-sm font-bold text-text-main/80">ROI Status: {stats.investment.roiStatus}</span>
                                 </div>
-                                <div className="flex items-center gap-2">
-                                    <ExternalLink className="w-4 h-4 text-primary" />
-                                    <button className="text-sm font-bold text-primary hover:underline">View History</button>
-                                </div>
+
                             </div>
                         </div>
                     </div>
