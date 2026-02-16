@@ -13,6 +13,10 @@ interface Withdrawal {
 interface WithdrawalState {
     balance: number;
     history: Withdrawal[];
+    summary: {
+        totalWithdrawn: number;
+        totalPending: number;
+    };
     loading: boolean;
     error: string | null;
 }
@@ -20,6 +24,10 @@ interface WithdrawalState {
 const initialState: WithdrawalState = {
     balance: 0,
     history: [],
+    summary: {
+        totalWithdrawn: 0,
+        totalPending: 0
+    },
     loading: false,
     error: null
 };
@@ -92,7 +100,8 @@ const withdrawalSlice = createSlice({
             })
             .addCase(fetchWithdrawalHistory.fulfilled, (state, action) => {
                 state.loading = false;
-                state.history = action.payload;
+                state.history = action.payload.items;
+                state.summary = action.payload.summary;
             })
             .addCase(fetchWithdrawalHistory.rejected, (state, action) => {
                 state.loading = false;

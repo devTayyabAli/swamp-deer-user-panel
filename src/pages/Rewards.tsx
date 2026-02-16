@@ -4,6 +4,7 @@ import {
     Trophy,
     Gift,
     CheckCircle2,
+    XCircle,
     Lock,
     Clock,
     ArrowRight
@@ -95,7 +96,6 @@ export default function Rewards() {
             <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
                 {stats.levels.map((level) => {
                     const isAchieved = level.status === 'achieved';
-                    const isClaimed = level.isClaimed;
 
                     return (
                         <div
@@ -184,21 +184,29 @@ export default function Rewards() {
                                 <div className="pt-6 border-t border-border-subtle">
                                     {isAchieved ? (
                                         <div className="flex items-center justify-between">
-                                            {level.claimStatus === 'not_claimed' ? (
-                                                <button
-                                                    onClick={() => handleClaim(level.id, level.reward)}
-                                                    className="w-full py-4 bg-emerald-500 hover:bg-emerald-600 text-white rounded-2xl font-black text-sm transition-all shadow-lg shadow-emerald-500/20 active:scale-[0.98] flex items-center justify-center gap-2"
-                                                >
-                                                    Claim This Reward <ArrowRight className="w-4 h-4" />
-                                                </button>
+                                            {level.claimStatus === 'not_claimed' || level.claimStatus === 'rejected' ? (
+                                                <div className="w-full space-y-3">
+                                                    {level.claimStatus === 'rejected' && (
+                                                        <div className="flex items-center gap-2 p-3 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800/50 rounded-xl text-red-700 dark:text-red-400 text-[10px] font-bold">
+                                                            <XCircle className="w-4 h-4" />
+                                                            Your previous request was rejected. You can try claiming again.
+                                                        </div>
+                                                    )}
+                                                    <button
+                                                        onClick={() => handleClaim(level.id, level.reward)}
+                                                        className="w-full py-4 bg-emerald-500 hover:bg-emerald-600 text-white rounded-2xl font-black text-sm transition-all shadow-lg shadow-emerald-500/20 active:scale-[0.98] flex items-center justify-center gap-2"
+                                                    >
+                                                        {level.claimStatus === 'rejected' ? 'Retry Claiming Reward' : 'Claim This Reward'} <ArrowRight className="w-4 h-4" />
+                                                    </button>
+                                                </div>
                                             ) : (
                                                 <div className={cn(
                                                     "w-full py-4 rounded-2xl font-black text-sm flex items-center justify-center gap-3 border-2 border-dashed",
-                                                    isClaimed
+                                                    level.claimStatus === 'approved'
                                                         ? "bg-emerald-50 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-800/50 text-emerald-700 dark:text-emerald-400"
                                                         : "bg-amber-50 dark:bg-amber-950/20 border-amber-200 dark:border-amber-800/50 text-amber-700 dark:text-amber-400"
                                                 )}>
-                                                    {isClaimed ? (
+                                                    {level.claimStatus === 'approved' ? (
                                                         <>
                                                             <CheckCircle2 className="w-5 h-5" />
                                                             Reward Approved & Issued

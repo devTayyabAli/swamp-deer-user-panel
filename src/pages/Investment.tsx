@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
+import { Wallet, TrendingUp } from 'lucide-react';
 import { createSale, getSales, resetSalesState } from '../redux/slices/salesSlice';
 import type { RootState, AppDispatch } from '../redux/store';
 import { cn } from '../lib/utils';
@@ -11,7 +12,7 @@ const Investment = () => {
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
     const { user } = useSelector((state: RootState) => state.auth);
-    const { sales, loading, success, error } = useSelector((state: RootState) => state.sales);
+    const { sales, summary, loading, success, error } = useSelector((state: RootState) => state.sales);
 
     const [activeTab, setActiveTab] = useState<'create' | 'history'>('create');
     const [successInvestment, setSuccessInvestment] = useState<{ id: string } | null>(null);
@@ -161,6 +162,39 @@ const Investment = () => {
                     >
                         History
                     </button>
+                </div>
+            </div>
+
+            {/* KPI Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 animate-in slide-in-from-top-4 duration-500 delay-150">
+                <div className="bg-card-bg p-6 rounded-2xl border border-border-subtle shadow-sm hover:shadow-md transition-all group relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full translate-x-1/2 -translate-y-1/2" />
+                    <div className="flex items-center gap-4 relative z-10">
+                        <div className="p-3 bg-primary/10 rounded-xl text-primary group-hover:scale-110 transition-transform">
+                            <Wallet className="w-6 h-6" />
+                        </div>
+                        <div>
+                            <p className="text-xs font-bold text-text-muted uppercase tracking-wider mb-0.5">Total Investments</p>
+                            <h3 className="text-2xl font-black text-text-main tracking-tight">
+                                Rs {summary.totalAmount.toLocaleString()}
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="bg-card-bg p-6 rounded-2xl border border-border-subtle shadow-sm hover:shadow-md transition-all group relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-accent-gold/5 rounded-full translate-x-1/2 -translate-y-1/2" />
+                    <div className="flex items-center gap-4 relative z-10">
+                        <div className="p-3 bg-accent-gold/10 rounded-xl text-accent-gold group-hover:scale-110 transition-transform">
+                            <TrendingUp className="w-6 h-6" />
+                        </div>
+                        <div>
+                            <p className="text-xs font-bold text-text-muted uppercase tracking-wider mb-0.5">Total Profit Earned</p>
+                            <h3 className="text-2xl font-black text-text-main tracking-tight">
+                                Rs {summary.totalProfit.toLocaleString()}
+                            </h3>
+                        </div>
+                    </div>
                 </div>
             </div>
 

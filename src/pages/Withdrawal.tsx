@@ -9,7 +9,7 @@ import { fetchBalance, fetchWithdrawalHistory, submitWithdrawalRequest } from '.
 
 export default function Withdrawal() {
     const dispatch = useDispatch<AppDispatch>();
-    const { balance, history, loading } = useSelector((state: RootState) => state.withdrawal);
+    const { balance, history, summary, loading } = useSelector((state: RootState) => state.withdrawal);
 
     const [activeTab, setActiveTab] = useState<'request' | 'history'>('request');
     const [amount, setAmount] = useState('');
@@ -72,6 +72,8 @@ export default function Withdrawal() {
         }
     };
 
+    console.log("bankDetails", history);
+
     return (
         <div className="space-y-8 animate-in fade-in duration-700">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -98,6 +100,54 @@ export default function Withdrawal() {
                     >
                         History
                     </button>
+                </div>
+            </div>
+
+            {/* KPI Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 animate-in slide-in-from-top-4 duration-500 delay-150">
+                <div className="bg-card-bg p-6 rounded-2xl border border-border-subtle shadow-sm hover:shadow-md transition-all group relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full translate-x-1/2 -translate-y-1/2" />
+                    <div className="flex items-center gap-4 relative z-10">
+                        <div className="p-3 bg-primary/10 rounded-xl text-primary group-hover:scale-110 transition-transform">
+                            <ArrowDownCircle className="w-6 h-6" />
+                        </div>
+                        <div>
+                            <p className="text-xs font-bold text-text-muted uppercase tracking-wider mb-0.5">Total Withdrawn</p>
+                            <h3 className="text-2xl font-black text-text-main tracking-tight">
+                                Rs {summary.totalWithdrawn.toLocaleString()}
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="bg-card-bg p-6 rounded-2xl border border-border-subtle shadow-sm hover:shadow-md transition-all group relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-full translate-x-1/2 -translate-y-1/2" />
+                    <div className="flex items-center gap-4 relative z-10">
+                        <div className="p-3 bg-amber-500/10 rounded-xl text-amber-500 group-hover:scale-110 transition-transform">
+                            <Clock className="w-6 h-6" />
+                        </div>
+                        <div>
+                            <p className="text-xs font-bold text-text-muted uppercase tracking-wider mb-0.5">Pending Withdrawals</p>
+                            <h3 className="text-2xl font-black text-text-main tracking-tight">
+                                Rs {summary.totalPending.toLocaleString()}
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="hidden lg:block bg-card-bg p-6 rounded-2xl border border-border-subtle shadow-sm hover:shadow-md transition-all group relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full translate-x-1/2 -translate-y-1/2" />
+                    <div className="flex items-center gap-4 relative z-10">
+                        <div className="p-3 bg-emerald-500/10 rounded-xl text-emerald-500 group-hover:scale-110 transition-transform">
+                            <Wallet className="w-6 h-6" />
+                        </div>
+                        <div>
+                            <p className="text-xs font-bold text-text-muted uppercase tracking-wider mb-0.5">Available Balance</p>
+                            <h3 className="text-2xl font-black text-text-main tracking-tight">
+                                Rs {balance.toLocaleString()}
+                            </h3>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -309,8 +359,10 @@ export default function Withdrawal() {
                                 <tr>
                                     <th className="px-6 py-4 text-xs font-bold text-text-muted uppercase tracking-wider">Request Date</th>
                                     <th className="px-6 py-4 text-xs font-bold text-text-muted uppercase tracking-wider">Amount</th>
+                                    <th className="px-6 py-4 text-xs font-bold text-text-muted uppercase tracking-wider">Method</th>
                                     <th className="px-6 py-4 text-xs font-bold text-text-muted uppercase tracking-wider">Status</th>
-                                    <th className="px-6 py-4 text-xs font-bold text-text-muted uppercase tracking-wider text-right">Transaction Details</th>
+
+
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-border-subtle">
@@ -333,6 +385,9 @@ export default function Withdrawal() {
                                                 <span className="font-black text-text-main">Rs {item.amount.toLocaleString()}</span>
                                             </td>
                                             <td className="px-6 py-4">
+                                                <span className="font-black text-text-main">{item.method}</span>
+                                            </td>
+                                            <td className="px-6 py-4">
                                                 {item.status === 'completed' || item.status === 'approved' ? (
                                                     <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 dark:border-emerald-500/30">
                                                         <CheckCircle className="w-3 h-3" />
@@ -350,13 +405,14 @@ export default function Withdrawal() {
                                                     </span>
                                                 )}
                                             </td>
-                                            <td className="px-6 py-4 text-right">
+
+                                            {/* <td className="px-6 py-4 text-right">
                                                 {item.txId ? (
                                                     <code className="text-[10px] font-mono bg-soft/50 px-2 py-1 rounded text-text-muted">{item.txId}</code>
                                                 ) : (
                                                     <span className="text-xs text-text-muted/60 italic">Processing...</span>
                                                 )}
-                                            </td>
+                                            </td> */}
                                         </tr>
                                     ))
                                 )}

@@ -17,11 +17,13 @@ import { toast } from 'react-hot-toast';
 import { cn } from '../lib/utils';
 import { fetchDashboardStats, claimReward } from '../redux/slices/dashboardSlice';
 import type { RootState, AppDispatch } from '../redux/store';
+import { useNavigate } from 'react-router-dom';
 
 export default function Dashboard() {
     const dispatch = useDispatch<AppDispatch>();
     const { stats, loading, error } = useSelector((state: RootState) => state.dashboard);
     const [activeInvIndex, setActiveInvIndex] = React.useState(0);
+    const navigate = useNavigate();
 
     React.useEffect(() => {
         dispatch(fetchDashboardStats());
@@ -282,7 +284,7 @@ export default function Dashboard() {
                                 <Trophy className="w-5 h-5 text-accent-gold" />
                                 Levels & Achievements
                             </h3>
-                            <button className="text-sm font-bold text-primary hover:underline flex items-center gap-1">
+                            <button onClick={() => navigate('/rewards')} className="text-sm font-bold text-primary hover:underline flex items-center gap-1">
                                 View All <ChevronRight className="w-4 h-4" />
                             </button>
                         </div>
@@ -357,12 +359,12 @@ export default function Dashboard() {
                                                             <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">
                                                                 Achieved
                                                             </span>
-                                                            {level.claimStatus === 'not_claimed' && (
+                                                            {(level.claimStatus === 'not_claimed' || level.claimStatus === 'rejected') && (
                                                                 <button
                                                                     onClick={() => handleClaim(level.id, level.reward)}
                                                                     className="text-[10px] font-black text-primary hover:text-deep-green underline uppercase tracking-tighter"
                                                                 >
-                                                                    Claim Reward
+                                                                    {level.claimStatus === 'rejected' ? 'Retry Claim' : 'Claim Reward'}
                                                                 </button>
                                                             )}
                                                             {level.claimStatus === 'pending' && (
@@ -370,6 +372,9 @@ export default function Dashboard() {
                                                             )}
                                                             {level.claimStatus === 'approved' && (
                                                                 <span className="text-[8px] font-black text-emerald-600 uppercase tracking-tighter italic">Reward Received</span>
+                                                            )}
+                                                            {level.claimStatus === 'rejected' && (
+                                                                <span className="text-[8px] font-black text-red-600 uppercase tracking-tighter italic">Rejected</span>
                                                             )}
                                                         </div>
                                                     ) : (
