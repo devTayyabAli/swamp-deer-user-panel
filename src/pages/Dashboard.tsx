@@ -6,7 +6,6 @@ import {
     UserPlus,
     Wallet,
     ArrowUpRight,
-    BarChart3,
     ChevronRight,
     Target,
     Trophy,

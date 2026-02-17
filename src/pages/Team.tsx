@@ -1,5 +1,5 @@
 import React from 'react';
-import { Users, Search, Filter, Calendar, Wallet } from 'lucide-react';
+import { Users, Search, Calendar, Wallet } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchTeamMembers } from '../redux/slices/teamSlice';
