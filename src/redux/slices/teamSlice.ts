@@ -10,7 +10,9 @@ interface TeamMember {
     profit: number;
     date: string;
     upline: string;
+    uplineId?: string;
     type: 'direct' | 'indirect';
+    level?: number;
 }
 
 interface TeamState {

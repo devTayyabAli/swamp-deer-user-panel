@@ -10,6 +10,7 @@ type TeamType = 'direct' | 'indirect' | 'all';
 export default function Team() {
     const [activeTab, setActiveTab] = React.useState<TeamType>('all');
     const [searchTerm, setSearchTerm] = React.useState('');
+    const [levelFilter, setLevelFilter] = React.useState<string>('all');
     const dispatch = useDispatch<AppDispatch>();
     const { direct, indirect, all, loading } = useSelector((state: RootState) => state.team);
 
@@ -27,7 +28,10 @@ export default function Team() {
     const filteredMembers = getTeamList().filter(member => {
         const matchesSearch = member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
             member.email.toLowerCase().includes(searchTerm.toLowerCase());
-        return matchesSearch;
+        // Treat undefined level as level 1 (default)
+        const memberLevel = (member.level || 1).toString();
+        const matchesLevel = levelFilter === 'all' || memberLevel === levelFilter;
+        return matchesSearch && matchesLevel;
     });
 
     return (
@@ -88,10 +92,21 @@ export default function Team() {
                         className="w-full pl-11 pr-4 py-2.5 bg-soft border border-border-subtle rounded-xl focus:ring-2 focus:ring-primary/20 outline-none text-sm font-bold text-text-main placeholder:text-text-muted/50"
                     />
                 </div>
-                <button className="flex items-center gap-2 px-4 py-2.5 text-sm font-bold text-text-muted dark:text-gray-300 bg-soft rounded-xl hover:bg-soft/70 transition-colors">
-                    <Filter className="w-4 h-4" />
-                    Filter
-                </button>
+                <select
+                    value={levelFilter}
+                    onChange={(e) => setLevelFilter(e.target.value)}
+                    className="px-4 py-2.5 text-sm font-bold text-text-main bg-soft border border-border-subtle rounded-xl focus:ring-2 focus:ring-primary/20 outline-none appearance-none cursor-pointer min-w-[140px]"
+                >
+                    <option value="all">All Levels</option>
+                    <option value="1">Level 1</option>
+                    <option value="2">Level 2</option>
+                    <option value="3">Level 3</option>
+                    <option value="4">Level 4</option>
+                    <option value="5">Level 5</option>
+                    <option value="6">Level 6</option>
+                    <option value="7">Level 7</option>
+                    <option value="8">Level 8</option>
+                </select>
             </div>
 
             {/* Team Table */}
@@ -101,6 +116,7 @@ export default function Team() {
                         <thead className="bg-soft/50 border-b border-border-subtle">
                             <tr>
                                 <th className="px-6 py-4 text-xs font-bold text-text-muted uppercase tracking-wider whitespace-nowrap">Member Details</th>
+                                <th className="px-6 py-4 text-xs font-bold text-text-muted uppercase tracking-wider whitespace-nowrap">Level</th>
                                 <th className="px-6 py-4 text-xs font-bold text-text-muted uppercase tracking-wider whitespace-nowrap">Sale Amount</th>
                                 <th className="px-6 py-4 text-xs font-bold text-text-muted uppercase tracking-wider whitespace-nowrap">Join Date</th>
                                 <th className="px-6 py-4 text-xs font-bold text-text-muted uppercase tracking-wider whitespace-nowrap">Upline</th>
@@ -121,6 +137,11 @@ export default function Team() {
                                                 <div className="text-xs text-text-muted">{member.email}</div>
                                             </div>
                                         </div>
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <span className="inline-flex items-center px-2 py-1 rounded-lg text-xs font-bold bg-primary/10 text-primary border border-primary/20">
+                                            L{member.level || 1}
+                                        </span>
                                     </td>
                                     <td className="px-6 py-4">
                                         <div className="flex items-center gap-1.5 text-sm font-bold text-text-main">

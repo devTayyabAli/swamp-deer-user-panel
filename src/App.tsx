@@ -12,6 +12,7 @@ import Profile from './pages/Profile';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import Rewards from './pages/Rewards';
+import Tree from './pages/Tree';
 import VerifyEmail from './pages/VerifyEmail';
 import { ThemeProvider } from './context/ThemeContext';
 
@@ -32,6 +33,7 @@ function App() {
           <Route element={<UserLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/team" element={<Team />} />
+            <Route path="/tree" element={<Tree />} />
             <Route path="/investment" element={<Investment />} />
             <Route path="/income" element={<Income />} />
             <Route path="/rewards" element={<Rewards />} />

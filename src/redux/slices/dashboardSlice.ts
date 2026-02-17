@@ -13,6 +13,13 @@ interface Level {
     isClaimed: boolean;
     remainingDirect: number;
     remainingTotal: number;
+    legsAchieved?: number;
+    legsRequired?: number;
+    freshSales?: {
+        directBusiness: number;
+        totalBusiness: number;
+        sinceDate: string;
+    } | null;
 }
 
 interface ActiveInvestment {

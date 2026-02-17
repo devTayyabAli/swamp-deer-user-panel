@@ -15,7 +15,8 @@ import {
     Gift,
     ArrowDownToLine,
     Sun,
-    Moon
+    Moon,
+    Network
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { cn } from '../lib/utils';
@@ -24,6 +25,7 @@ import { useTheme } from '../context/ThemeContext';
 const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
     { name: 'My Team', href: '/team', icon: Users },
+    { name: 'Team Tree', href: '/tree', icon: Network },
     { name: 'Investment', href: '/investment', icon: TrendingUp },
     { name: 'Income', href: '/income', icon: Wallet },
     { name: 'Rewards', href: '/rewards', icon: Gift },

@@ -84,15 +84,22 @@ export default function Dashboard() {
 
     if (!stats) return null;
 
-    const kpis = [
-        { label: 'Total Business Volume', value: formatCurrency(stats.kpis.totalBusinessVolume), icon: BarChart3, color: 'text-blue-600', bg: 'bg-blue-100' },
-        { label: 'Available Balance', value: formatCurrency(stats.kpis.availableBalance), icon: Wallet, color: 'text-emerald-600', bg: 'bg-emerald-100' },
-        { label: 'Total Direct Business', value: formatCurrency(stats.kpis.totalDirectBusiness), icon: UserPlus, color: 'text-emerald-300', bg: 'bg-emerald-50' },
-        { label: 'Staking Bonus', value: formatCurrency(stats.kpis.stakingIncome), icon: TrendingUp, color: 'text-primary', bg: 'bg-primary/10' },
-        { label: 'Referral Bonus', value: formatCurrency(stats.kpis.referralIncome), icon: Target, color: 'text-orange-600', bg: 'bg-orange-100' },
-        { label: 'Level Bonus', value: formatCurrency(stats.kpis.levelIncome), icon: Users, color: 'text-purple-600', bg: 'bg-purple-100' },
-        { label: 'Total Profit Earned', value: formatCurrency(stats.kpis.totalProfitEarned), icon: Trophy, color: 'text-accent-gold', bg: 'bg-accent-gold/10' },
-    ];
+    const kpis: Array<{
+        label: string;
+        value: string;
+        icon: any;
+        color: string;
+        bg: string;
+        monthlyValue?: string;
+    }> = [
+            // { label: 'Total Business Volume', value: formatCurrency(stats.kpis.totalBusinessVolume), icon: BarChart3, color: 'text-blue-600', bg: 'bg-blue-100' },
+            { label: 'Available Balance', value: formatCurrency(stats.kpis.availableBalance), icon: Wallet, color: 'text-emerald-600', bg: 'bg-emerald-100', monthlyValue: formatCurrency(0) },
+            { label: 'Total Direct Business', value: formatCurrency(stats.kpis.totalDirectBusiness), icon: UserPlus, color: 'text-emerald-300', bg: 'bg-emerald-50', monthlyValue: formatCurrency(0) },
+            { label: 'Monthly Profit', value: formatCurrency(stats.kpis.stakingIncome), icon: TrendingUp, color: 'text-primary', bg: 'bg-primary/10', monthlyValue: formatCurrency(stats.investment?.monthlyProfit || 0) },
+            { label: 'Direct/Indirect Commission', value: formatCurrency(stats.kpis.referralIncome), icon: Target, color: 'text-orange-600', bg: 'bg-orange-100', monthlyValue: formatCurrency(0) },
+            { label: 'Team ROI', value: formatCurrency(stats.kpis.levelIncome), icon: Users, color: 'text-purple-600', bg: 'bg-purple-100', monthlyValue: formatCurrency(0) },
+            { label: 'Total Commission', value: formatCurrency(stats.kpis.totalProfitEarned), icon: Trophy, color: 'text-accent-gold', bg: 'bg-accent-gold/10', monthlyValue: formatCurrency(0) },
+        ];
 
     const teamStats = [
         { label: 'Total Team Size', value: stats.teamStats.totalTeamSize.toString(), icon: Users },
@@ -130,6 +137,11 @@ export default function Dashboard() {
                         </div>
                         <p className="text-sm font-medium text-text-muted mb-1">{kpi.label}</p>
                         <h3 className="text-2xl font-bold text-text-main tracking-tight">{kpi.value}</h3>
+                        {kpi.monthlyValue !== undefined && (
+                            <p className="text-xs font-bold text-emerald-600 dark:text-emerald-400 mt-2">
+                                This month: {kpi.monthlyValue}
+                            </p>
+                        )}
                     </div>
                 ))}
             </div>
@@ -292,11 +304,12 @@ export default function Dashboard() {
                             <table className="w-full text-left">
                                 <thead>
                                     <tr className="bg-soft/50 border-b border-border-subtle transition-colors">
-                                        <th className="px-6 py-4 text-[10px] font-black text-text-muted uppercase tracking-[0.2em]">Lvl</th>
-                                        <th className="px-6 py-4 text-[10px] font-black text-text-muted uppercase tracking-[0.2em]">Rank</th>
-                                        <th className="px-6 py-4 text-[10px] font-black text-text-muted uppercase tracking-[0.2em]">Target (Cash/Prod)</th>
-                                        <th className="px-6 py-4 text-[10px] font-black text-text-muted uppercase tracking-[0.2em]">Reward</th>
-                                        <th className="px-6 py-4 text-[10px] font-black text-text-muted uppercase tracking-[0.2em]">Progress</th>
+                                        <th className="px-6 py-4 text-[10px] font-black text-text-muted uppercase tracking-[0.2em] text-left">Rank</th>
+                                        <th className="px-6 py-4 text-[10px] font-black text-text-muted uppercase tracking-[0.2em] text-left">Name</th>
+                                        <th className="px-6 py-4 text-[10px] font-black text-text-muted uppercase tracking-[0.2em] text-left">Sales Target</th>
+                                        <th className="px-6 py-4 text-[10px] font-black text-text-muted uppercase tracking-[0.2em] text-left">Leg Requirement</th>
+                                        <th className="px-6 py-4 text-[10px] font-black text-text-muted uppercase tracking-[0.2em] text-left">Reward</th>
+                                        <th className="px-6 py-4 text-[10px] font-black text-text-muted uppercase tracking-[0.2em] text-center">Progress</th>
                                         <th className="px-6 py-4 text-[10px] font-black text-text-muted uppercase tracking-[0.2em] text-right">Status</th>
                                     </tr>
                                 </thead>
@@ -336,7 +349,23 @@ export default function Dashboard() {
                                                 <td className="px-6 py-4">
                                                     <div className="flex items-center gap-2">
                                                         <Target className="w-3.5 h-3.5 text-text-muted/60" />
-                                                        <span className="text-[11px] text-text-muted font-bold">{level.criteria}</span>
+                                                        <div className="flex flex-col">
+                                                            <span className="text-[11px] text-text-muted font-bold">{level.criteria}</span>
+                                                            {level.freshSales && (
+                                                                <span className="text-[9px] text-primary font-bold italic">Fresh sales only</span>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <div className="flex items-center gap-2">
+                                                        <Users className="w-3.5 h-3.5 text-text-muted/60" />
+                                                        <span className={cn(
+                                                            "text-[11px] font-bold",
+                                                            (level.legsAchieved || 0) >= (level.legsRequired || 2) ? "text-emerald-600" : "text-text-muted"
+                                                        )}>
+                                                            {level.legsAchieved || 0}/{level.legsRequired || 2} Legs
+                                                        </span>
                                                     </div>
                                                 </td>
                                                 <td className="px-6 py-4">
