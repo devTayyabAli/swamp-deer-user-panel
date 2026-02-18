@@ -166,14 +166,24 @@ export default function SignUp() {
                                     <input
                                         {...register('userName', {
                                             required: 'Username is required',
+                                            minLength: { value: 3, message: 'Username must be at least 3 characters' },
+                                            pattern: {
+                                                value: /^\S+$/,
+                                                message: 'Username cannot contain spaces'
+                                            },
                                             validate: (val) => validateField('userName', val)
                                         })}
                                         type="text"
+                                        onChange={(e) => {
+                                            // Strip spaces as user types
+                                            const noSpaces = e.target.value.replace(/\s/g, '');
+                                            e.target.value = noSpaces;
+                                        }}
                                         className={cn(
                                             "w-full pl-11 pr-4 py-3 bg-soft border rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none text-text-main",
                                             errors.userName ? "border-red-500" : "border-border-subtle"
                                         )}
-                                        placeholder="Select a username"
+                                        placeholder="Select a username (no spaces)"
                                     />
                                 </div>
                                 {errors.userName && <p className="text-xs text-red-500 ml-1 mt-1">{errors.userName.message}</p>}

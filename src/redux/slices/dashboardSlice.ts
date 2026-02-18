@@ -49,6 +49,13 @@ interface DashboardStats {
         referralIncome: number;
         levelIncome: number;
         availableBalance: number;
+        monthly: {
+            directBusiness: number;
+            stakingIncome: number;
+            referralIncome: number;
+            levelIncome: number;
+            totalCommission: number;
+        };
     };
     teamStats: {
         totalTeamSize: number;

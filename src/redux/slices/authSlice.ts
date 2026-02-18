@@ -15,6 +15,11 @@ interface User {
     currentLevel?: number;
     createdAt?: string;
     profilePic?: string;
+    upline?: {
+        _id: string;
+        name: string;
+        userName: string;
+    } | null;
     bankDetails?: {
         accountNumber: string;
         bankName: string;

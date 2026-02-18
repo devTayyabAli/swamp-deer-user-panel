@@ -264,6 +264,18 @@ export default function Profile() {
                                     />
                                 </div>
                             </div>
+                            <div className="space-y-2">
+                                <label className="text-xs font-bold text-text-muted/60 uppercase tracking-widest">Upline (Referrer)</label>
+                                <div className="relative">
+                                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
+                                    <input
+                                        disabled
+                                        type="text"
+                                        value={user?.upline ? `${user.upline.name} (@${user.upline.userName})` : 'No upline'}
+                                        className="w-full pl-10 pr-4 py-3 bg-soft border border-border-subtle rounded-xl font-bold text-sm opacity-60 cursor-not-allowed text-text-main"
+                                    />
+                                </div>
+                            </div>
                         </form>
 
                         <h3 className="text-lg font-bold text-text-main mt-12 mb-8 border-b border-border-subtle pb-4">Bank Account Details</h3>

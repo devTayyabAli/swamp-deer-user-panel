@@ -90,14 +90,15 @@ export default function Dashboard() {
         color: string;
         bg: string;
         monthlyValue?: string;
+        monthlyLabel?: string;
     }> = [
             // { label: 'Total Business Volume', value: formatCurrency(stats.kpis.totalBusinessVolume), icon: BarChart3, color: 'text-blue-600', bg: 'bg-blue-100' },
-            { label: 'Available Balance', value: formatCurrency(stats.kpis.availableBalance), icon: Wallet, color: 'text-emerald-600', bg: 'bg-emerald-100', monthlyValue: formatCurrency(0) },
-            { label: 'Total Direct Business', value: formatCurrency(stats.kpis.totalDirectBusiness), icon: UserPlus, color: 'text-emerald-300', bg: 'bg-emerald-50', monthlyValue: formatCurrency(0) },
-            { label: 'Monthly Profit', value: formatCurrency(stats.kpis.stakingIncome), icon: TrendingUp, color: 'text-primary', bg: 'bg-primary/10', monthlyValue: formatCurrency(stats.investment?.monthlyProfit || 0) },
-            { label: 'Direct/Indirect Commission', value: formatCurrency(stats.kpis.referralIncome), icon: Target, color: 'text-orange-600', bg: 'bg-orange-100', monthlyValue: formatCurrency(0) },
-            { label: 'Team ROI', value: formatCurrency(stats.kpis.levelIncome), icon: Users, color: 'text-purple-600', bg: 'bg-purple-100', monthlyValue: formatCurrency(0) },
-            { label: 'Total Commission', value: formatCurrency(stats.kpis.totalProfitEarned), icon: Trophy, color: 'text-accent-gold', bg: 'bg-accent-gold/10', monthlyValue: formatCurrency(0) },
+            { label: 'Available Balance', value: formatCurrency(stats.kpis.availableBalance), icon: Wallet, color: 'text-emerald-600', bg: 'bg-emerald-100', monthlyValue: formatCurrency(stats.kpis.monthly?.totalCommission || 0) },
+            { label: 'Total Direct Business', value: formatCurrency(stats.kpis.totalDirectBusiness), icon: UserPlus, color: 'text-emerald-300', bg: 'bg-emerald-50', monthlyValue: formatCurrency(stats.kpis.monthly?.directBusiness || 0) },
+            { label: 'Monthly Profit', value: formatCurrency(stats.kpis.stakingIncome), icon: TrendingUp, color: 'text-primary', bg: 'bg-primary/10', monthlyValue: formatCurrency(stats.investment?.monthlyProfit || 0), monthlyLabel: 'Monthly ROI:' },
+            { label: 'Direct/Indirect Commission', value: formatCurrency(stats.kpis.referralIncome), icon: Target, color: 'text-orange-600', bg: 'bg-orange-100', monthlyValue: formatCurrency(stats.kpis.monthly?.referralIncome || 0) },
+            { label: 'Team ROI', value: formatCurrency(stats.kpis.levelIncome), icon: Users, color: 'text-purple-600', bg: 'bg-purple-100', monthlyValue: formatCurrency(stats.kpis.monthly?.levelIncome || 0) },
+            { label: 'Total Commission', value: formatCurrency(stats.kpis.totalProfitEarned), icon: Trophy, color: 'text-accent-gold', bg: 'bg-accent-gold/10', monthlyValue: formatCurrency(stats.kpis.monthly?.totalCommission || 0) },
         ];
 
     const teamStats = [
@@ -138,7 +139,7 @@ export default function Dashboard() {
                         <h3 className="text-2xl font-bold text-text-main tracking-tight">{kpi.value}</h3>
                         {kpi.monthlyValue !== undefined && (
                             <p className="text-xs font-bold text-emerald-600 dark:text-emerald-400 mt-2">
-                                This month: {kpi.monthlyValue}
+                                {kpi.monthlyLabel || 'This month:'} {kpi.monthlyValue}
                             </p>
                         )}
                     </div>
