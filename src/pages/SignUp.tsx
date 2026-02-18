@@ -80,7 +80,9 @@ export default function SignUp() {
         }
         try {
             const response = await api.post('/auth/validate', { field, value: validationValue });
-            return response.data.success || response.data.message;
+            // Must return exactly `true` for success — returning a string (even a success message)
+            // is treated as a validation error by react-hook-form
+            return response.data.success === true ? true : (response.data.message || 'Validation failed');
         } catch (err: any) {
             return err.response?.data?.message || 'Validation failed';
         }
@@ -175,9 +177,9 @@ export default function SignUp() {
                                         })}
                                         type="text"
                                         onChange={(e) => {
-                                            // Strip spaces as user types
+                                            // Strip spaces and update RHF state properly
                                             const noSpaces = e.target.value.replace(/\s/g, '');
-                                            e.target.value = noSpaces;
+                                            setValue('userName', noSpaces, { shouldValidate: false });
                                         }}
                                         className={cn(
                                             "w-full pl-11 pr-4 py-3 bg-soft border rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none text-text-main",
