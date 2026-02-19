@@ -145,7 +145,7 @@ export default function SignUp() {
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 mt-8">
                         <div className="grid grid-cols-1 gap-4">
                             <div className="group space-y-1">
-                                <label className="text-sm font-semibold text-text-main ml-1">Full Name</label>
+                                <label className="text-sm font-semibold text-text-main ml-1">Full Name <span className="text-red-500">*</span></label>
                                 <div className="relative">
                                     <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted group-focus-within:text-primary transition-colors" />
                                     <input
@@ -162,7 +162,7 @@ export default function SignUp() {
                             </div>
 
                             <div className="group space-y-1">
-                                <label className="text-sm font-semibold text-text-main ml-1">Username</label>
+                                <label className="text-sm font-semibold text-text-main ml-1">Username <span className="text-red-500">*</span></label>
                                 <div className="relative">
                                     <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted group-focus-within:text-primary transition-colors" />
                                     <input
@@ -192,7 +192,7 @@ export default function SignUp() {
                             </div>
 
                             <div className="group space-y-1">
-                                <label className="text-sm font-semibold text-text-main ml-1">Email Address</label>
+                                <label className="text-sm font-semibold text-text-main ml-1">Email Address <span className="text-red-500">*</span></label>
                                 <div className="relative">
                                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted group-focus-within:text-primary transition-colors" />
                                     <input
@@ -216,7 +216,7 @@ export default function SignUp() {
                             </div>
 
                             <div className="group space-y-1">
-                                <label className="text-sm font-semibold text-text-main ml-1">Phone Number</label>
+                                <label className="text-sm font-semibold text-text-main ml-1">Phone Number <span className="text-red-500">*</span></label>
                                 <div className="relative">
                                     <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center gap-2 z-10 pointer-events-none">
                                         <Phone className="w-5 h-5 text-text-muted group-focus-within:text-primary transition-colors" />
@@ -243,7 +243,7 @@ export default function SignUp() {
                             </div>
 
                             <div className="group space-y-1">
-                                <label className="text-sm font-semibold text-text-main ml-1">Select Branch</label>
+                                <label className="text-sm font-semibold text-text-main ml-1">Select Branch <span className="text-red-500">*</span></label>
                                 <div className="relative">
                                     <Hash className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted group-focus-within:text-primary transition-colors" />
                                     <select
@@ -268,11 +268,12 @@ export default function SignUp() {
                             </div>
 
                             <div className="group space-y-1">
-                                <label className="text-sm font-semibold text-text-main ml-1">Referral ID (Upline ID)</label>
+                                <label className="text-sm font-semibold text-text-main ml-1">Referral ID (Upline ID) <span className="text-red-500">*</span></label>
                                 <div className="relative">
                                     <Hash className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted group-focus-within:text-primary transition-colors" />
                                     <input
                                         {...register('upline', {
+                                            required: 'Referral ID is required',
                                             validate: (val) => validateField('upline', val)
                                         })}
                                         type="text"
@@ -287,7 +288,7 @@ export default function SignUp() {
                             </div>
 
                             <div className="group space-y-1">
-                                <label className="text-sm font-semibold text-text-main ml-1">Create Password</label>
+                                <label className="text-sm font-semibold text-text-main ml-1">Create Password <span className="text-red-500">*</span></label>
                                 <div className="relative">
                                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted group-focus-within:text-primary transition-colors" />
                                     <input
@@ -317,7 +318,7 @@ export default function SignUp() {
                             </div>
 
                             <div className="group space-y-1">
-                                <label className="text-sm font-semibold text-text-main ml-1">Confirm Password</label>
+                                <label className="text-sm font-semibold text-text-main ml-1">Confirm Password <span className="text-red-500">*</span></label>
                                 <div className="relative">
                                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted group-focus-within:text-primary transition-colors" />
                                     <input
