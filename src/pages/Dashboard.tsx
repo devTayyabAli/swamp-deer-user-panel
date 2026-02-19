@@ -44,7 +44,7 @@ export default function Dashboard() {
         })}`;
     };
 
-    const referralLink = stats ? `${import.meta.env.VITE_REFERRAL_BASE_URL}?ref=${stats.user.referralId}` : '';
+    const referralLink = stats ? `${import.meta.env.VITE_REFERRAL_BASE_URL || 'https://user.swampdeer.cloud/signup'}?ref=${stats.user.referralId}` : '';
 
     const copyReferral = () => {
         navigator.clipboard.writeText(referralLink);
