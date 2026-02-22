@@ -38,8 +38,8 @@ export default function Withdrawal() {
 
         const withdrawAmount = parseFloat(amount);
 
-        if (isNaN(withdrawAmount) || withdrawAmount < 50) {
-            toast.error('Minimum withdrawal amount is $50');
+        if (isNaN(withdrawAmount) || withdrawAmount < 5000) {
+            toast.error('Minimum withdrawal amount is Rs 5000');
             return;
         }
 
@@ -172,7 +172,7 @@ export default function Withdrawal() {
                                 <div className="flex flex-wrap gap-3 sm:gap-4">
                                     <div className="px-5 py-3 bg-white/10 rounded-2xl border border-white/20 backdrop-blur-md shadow-inner">
                                         <p className="text-[10px] sm:text-[11px] font-black opacity-60 uppercase tracking-widest mb-1">Min. Withdrawal</p>
-                                        <p className="text-base sm:text-lg font-black">Rs 50.00</p>
+                                        <p className="text-base sm:text-lg font-black">Rs 5000.00</p>
                                     </div>
                                     <div className="px-5 py-3 bg-white/10 rounded-2xl border border-white/20 backdrop-blur-md shadow-inner">
                                         <p className="text-[10px] sm:text-[11px] font-black opacity-60 uppercase tracking-widest mb-1">Processing Time</p>
@@ -197,11 +197,11 @@ export default function Withdrawal() {
                                             onChange={(e) => setAmount(e.target.value)}
                                             className="w-full pl-12 pr-4 py-3.5 bg-soft border border-border-subtle rounded-xl focus:ring-2 focus:ring-primary/20 outline-none font-bold text-lg text-text-main"
                                             required
-                                            min="50"
+                                            min="5000"
                                             step="0.01"
                                         />
                                     </div>
-                                    <p className="text-xs text-text-muted/60 italic font-medium">Fee: 5% Gross withdrawal amount will be deducted.</p>
+
                                 </div>
 
                                 <div className="space-y-4">
@@ -339,13 +339,10 @@ export default function Withdrawal() {
                                     <div className="w-1.5 h-1.5 rounded-full bg-accent-gold shrink-0 mt-1" />
                                     Withdrawals are processed within 24 to 48 working hours.
                                 </li>
+
                                 <li className="flex gap-3 text-xs font-medium text-text-muted leading-relaxed">
                                     <div className="w-1.5 h-1.5 rounded-full bg-accent-gold shrink-0 mt-1" />
-                                    Maximum 5% service charge applies to all methods.
-                                </li>
-                                <li className="flex gap-3 text-xs font-medium text-text-muted leading-relaxed">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-accent-gold shrink-0 mt-1" />
-                                    Ensure your wallet addresses are correct before submitting.
+                                    Ensure your Bank details are correct before submitting.
                                 </li>
                             </ul>
                         </div>
