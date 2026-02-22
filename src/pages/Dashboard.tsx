@@ -307,7 +307,7 @@ export default function Dashboard() {
                                         <th className="px-6 py-4 text-[10px] font-black text-text-muted uppercase tracking-[0.2em] text-left">Rank</th>
                                         <th className="px-6 py-4 text-[10px] font-black text-text-muted uppercase tracking-[0.2em] text-left">Name</th>
                                         <th className="px-6 py-4 text-[10px] font-black text-text-muted uppercase tracking-[0.2em] text-left">Sales Target</th>
-                                        <th className="px-6 py-4 text-[10px] font-black text-text-muted uppercase tracking-[0.2em] text-left">Leg Requirement</th>
+                                        <th className="px-6 py-4 text-[10px] font-black text-text-muted uppercase tracking-[0.2em] text-left">Two different lines requirement</th>
                                         <th className="px-6 py-4 text-[10px] font-black text-text-muted uppercase tracking-[0.2em] text-left">Reward</th>
                                         <th className="px-6 py-4 text-[10px] font-black text-text-muted uppercase tracking-[0.2em] text-center">Progress</th>
                                         <th className="px-6 py-4 text-[10px] font-black text-text-muted uppercase tracking-[0.2em] text-right">Status</th>
